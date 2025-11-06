@@ -20,3 +20,17 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.login-main {
+    display: flex;
+    height: 70vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-plate{
+    display: flex;
+    height: 230px;
+    width: 250px;
+    align-items: center;
+}
