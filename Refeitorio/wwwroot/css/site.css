@@ -23,14 +23,49 @@ body {
 
 .login-main {
     display: flex;
+    flex-direction: column;
     height: 70vh;
     justify-content: center;
     align-items: center;
 }
 
-.login-plate{
+.refeitorio-title {
+    margin: 30px;
+}
+
+.login-plate {
     display: flex;
     height: 230px;
-    width: 250px;
+    width: 270px;
     align-items: center;
+    justify-content: center;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.login-plate form {
+    text-align: center;
+}
+
+#btnRegistar {
+    background: white;
+    transition: 0.3s;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    text-align: center;
+}
+
+#btnRegistar:hover {
+    filter: brightness(0.9);
+}
+
+.btn-equal {
+    width: 0;
+    flex: 1 1 0;
+    white-space: nowrap;
+}
+
+.form-control {
+    filter: brightness(0.96);
+    border: none;
+    margin: 5px;
 }
