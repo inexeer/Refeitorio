@@ -65,7 +65,7 @@ body {
 }
 
 .form-control {
-    filter: brightness(0.96);
+    filter: brightness(0.9);
     border: none;
     margin: 5px;
 }
