@@ -1,0 +1,38 @@
+﻿@model Refeitorio.ViewModels.AdminPendingUsersViewModel
+
+<h3>Pedidos de registo pendentes</h3>
+
+@if (!Model.PendingUsers.Any())
+{
+	<p>Não há pedidos pendentes</p>
+}
+else
+{
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Email</th>
+				<th>Nome completo</th>
+				<th>NIF</th>
+				<th>Cargo</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var user in Model.PendingUsers)
+			{
+				<tr>
+					<td>@user.Email</td>
+					<td>@user.FullName</td>
+					<td>@user.Nif</td>
+					<td>@user.Role</td>
+					<td>
+						<form asp-action="ApproveUser" method="post" style="display:inline">
+							<input type="hidden" name="id" value="@user.Id" />
+							<button type="submit" class="btn btn-success btn-sm">Aprovar</button>
+						</form>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}

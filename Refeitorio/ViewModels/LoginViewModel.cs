@@ -4,9 +4,9 @@ namespace Refeitorio.ViewModels
 {
     public class LoginViewModel
     {
-        [Required(ErrorMessage = "Insira o Email")]
+        [Required(ErrorMessage = "O Email é obrigatório")]
         public string Email { get; set; }
-        [Required(ErrorMessage = "Insira a Palavra-Passe")]
+        [Required(ErrorMessage = "A Palavra-Passe é obrigatória")]
         public string Password { get; set; }
     }
 }

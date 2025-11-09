@@ -32,31 +32,59 @@ namespace Refeitorio.Services
             return Convert.ToBase64String(bytes);
         }
 
-        public bool Register(string email, string password, string fullname, UserType role)
+        public bool Register(string email, string password, string fullname, UserType role, string nif)
         {
-            if (m_users.Any(u => u.Email == email))
+            if (m_users.Any(u => u.Email == email || u.Nif == nif))
             {
                 return false;
             }
 
-            m_users.Add(new User
+            var user = new User
             {
                 Email = email,
                 PasswordHash = HashPassword(password),
                 FullName = fullname,
-                Role = role
-            });
+                Role = role,
+                Nif = nif,
+                IsApproved = role == UserType.Admin
+            };
 
+            m_users.Add(user);
             Save();
             return true;
         }
 
+        public User? GetUserByEmail(string email)
+        {
+            return m_users.FirstOrDefault(u => u.Email == email);
+        }
+
         public bool Login(string email, string password)
         {
-            var user = m_users.FirstOrDefault(u => u.Email == email);
+            var user = GetUserByEmail(email);
             if (user == null) return false;
 
+            if (!user.IsApproved)
+            {
+                return false;
+            }
+
             return user.PasswordHash == HashPassword(password);
+        }
+
+        public List<User> GetPendingUsers()
+        {
+            return m_users.Where(u => !u.IsApproved).ToList();
+        }
+
+        public void ApproveUser(Guid id)
+        {
+            var user = m_users.FirstOrDefault(u => u.Id == id);
+            if (user != null)
+            {
+                user.IsApproved = true;
+                Save();
+            }
         }
     }
 }

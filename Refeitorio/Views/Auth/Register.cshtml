@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Refeitorio.ViewModels.RegisterViewModel
+
+@{
 	ViewData["Title"] = "Register";
 	Layout = null;
 }
@@ -16,8 +18,75 @@
 <body>
     <div class="login-main">
         <div class="refeitorio-title">
-                <h2>Registar</h2>
-            </div>
+            <h1>Criar conta</h1>
+        </div>
+        <div class="login-plate-register">
+            <form asp-controller="Auth" asp-action="Register" method="post" id="form-register">
+                <div class="mt-1">
+                    <h4>Dados de acesso</h4>
+                </div>
+                <div class="input-group">
+                    <input asp-for="Email" class="form-control" placeholder="Endereço email" />
+                </div>
+                <div class="error-span">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="input-group">
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Palavra-passe" />
+                </div>
+                <div class="error-span">
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="input-group">
+                    <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirme palavra-passe" />
+                </div>
+                <div class="error-span">
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="input-group">
+                    <input asp-for="FullName" class="form-control" placeholder="Nome completo" />
+                </div>
+                <div class="error-span">
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+                <div class="input-group">
+                    <input asp-for="Nif" class="form-control" placeholder="NIF" />
+                </div>
+                <div class="error-span">
+                    <span asp-validation-for="Nif" class="text-danger"></span>
+                </div>
+                <div class="input-group">
+                    <select asp-for="Role" asp-items="Html.GetEnumSelectList<UserType>()" class="form-select">
+                        <option value="">--Selecione o cargo--</option>
+                    </select>
+                </div>
+                <div class="error-span">
+                    <span asp-validation-for="Role" class="text-danger"></span>
+                </div>
+                @if (ViewBag.Error != null)
+                {
+                    <div class="error-span">@ViewBag.Error</div>
+                }
+                else{
+                    <div class="error-span"></div>
+                }
+                <div class="d-flex">
+                    <button type="submit" class="btn btn-primary" id="btnRegistar" disabled>Registar</button>
+                </div>
+            </form>
+        </div>
     </div>
+    <script>
+        const form = document.getElementById("form-register");
+        const button = document.getElementById("btnRegistar");
+
+        form.addEventListener("input", () => {
+            const allFilled = Array.from(form.elements)
+                .filter(e => e.tagName === "INPUT" || e.tagName === "SELECT")
+                .every(e => e.value.trim() !== "");
+
+            button.disabled = !allFilled;
+        });
+    </script>
 </body>
 </html>

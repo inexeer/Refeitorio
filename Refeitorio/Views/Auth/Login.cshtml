@@ -21,19 +21,22 @@
                 <h2>Refeitorio</h2>
             </div>
             <div class="login-plate">
-                <form asp-controller="Auth" asp-action="Login" method="post">
+                <form asp-controller="Auth" asp-action="Login" method="post" autocomplete="off">
                     <div class="input-group">
-                        <input asp-for="Email" class="form-control" placeholder="Endereço email" />
+                        <input asp-for="Email" class="form-control" placeholder="Endereço email" autocomplete="off" />
                     </div>
-                    <div style="height: 25px;">
-                        <span asp-validation-for="Email" class="text-danger" style="margin: 0; padding: 0;"></span>
+                    <div class="error-span">
+                        <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                     <div class="input-group">
-                        <input asp-for="Password" class="form-control" placeholder="Palavra-passe" />
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Palavra-passe" autocomplete="off" />
                     </div>
-                    <div style="height: 25px;">
-                        <span asp-validation-for="Password" class="text-danger" style="margin: 0; padding: 0;"></span>
+                    <div class="error-span">
+                        <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
+                    @if(ViewBag.Error != null){
+                        <div class="error-span">@ViewBag.Error</div>
+                    }
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary btn-equal" id="btnEntrar">Entrar</button>
                         <button type="button" onclick="window.location.href='@Url.Action("Register", "Auth")'" class="btn btn-default btn-equal" id="btnRegistar">Registar</button>

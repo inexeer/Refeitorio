@@ -1,17 +1,27 @@
-﻿namespace Refeitorio.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Refeitorio.Models
 {
     public enum UserType
     {
-        Admin,
-        Staff,
-        Student
+        [Display(Name = "Administrador")]
+        Admin = 0,
+
+        [Display(Name = "Funcionário")]
+        Staff = 1,
+
+        [Display(Name = "Aluno")]
+        Student = 3
     }
     public class User
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string FullName { get; set; }
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public UserType Role { get; set; }
+        public string Nif { get; set; }
+
+        public bool IsApproved { get; set; } = false;
     }
 }

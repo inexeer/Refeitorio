@@ -1,8 +1,24 @@
-﻿@{
+﻿@model Refeitorio.ViewModels.AdminPendingUsersViewModel
+
+@{
     ViewData["Title"] = "Home Page";
+    var role = Context.Session.GetString("Role");
 }
 
-<div class="text-center">
-    <h1 class="display-4">Refeitorio</h1>
-    <p>Bom dia</p>
-</div>
+<h2>Dashboard</h2>
+<p>Bem vindo!</p>
+
+@if (role == "Admin")
+{
+    <partial name="_AdminPendingUsers" model="Model" />
+}
+else
+{
+    <p>Está logado como <strong>@role</strong></p>
+}
+
+<form asp-controller="Auth" asp-action="Logout" method="post" style="display:inline">
+    <button type="submit" class="btn btn-danger">Logout</button>
+</form>
+
+

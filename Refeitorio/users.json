@@ -1,0 +1,20 @@
+[
+  {
+    "Id": "66b8336e-c3ba-4535-a9ab-8c6c3a2e7c23",
+    "FullName": "Boris Borisovich",
+    "Email": "i230064@inete.net",
+    "PasswordHash": "WuhfYgIpd0\u002Bf2Xuzp\u002BgsQFcpGoMjqO5cpQ/mXyWoQyQ=",
+    "Role": 3,
+    "Nif": "123456789",
+    "IsApproved": true
+  },
+  {
+    "Id": "0ba0c280-146f-4df8-bf53-20cf6b6f007f",
+    "FullName": "Jose Costa",
+    "Email": "jcosta@inete.net",
+    "PasswordHash": "WuhfYgIpd0\u002Bf2Xuzp\u002BgsQFcpGoMjqO5cpQ/mXyWoQyQ=",
+    "Role": 0,
+    "Nif": "111111111",
+    "IsApproved": true
+  }
+]

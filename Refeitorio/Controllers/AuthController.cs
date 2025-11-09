@@ -19,8 +19,31 @@ namespace Refeitorio.Controllers
         [HttpPost]
         public IActionResult Login(LoginViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = m_userService.GetUserByEmail(model.Email);
+
+            if (user == null)
+            {
+                ViewBag.Error = "Email ou palavra-passe inválido!";
+                return View(model);
+            }
+
+            if (!user.IsApproved)
+            {
+                ViewBag.Error = "A sua conta ainda não foi aprovada";
+                return View(model);
+            }
+
             if (m_userService.Login(model.Email, model.Password))
+            {
+                HttpContext.Session.SetString("User", model.Email);
+                HttpContext.Session.SetString("Role", user.Role.ToString());
                 return RedirectToAction("Index", "Home");
+            }
             ViewBag.Error = "Email ou palavra-passe inválido!";
             return View();
         }
@@ -29,12 +52,20 @@ namespace Refeitorio.Controllers
         public IActionResult Register() => View();
 
         [HttpPost]
-        public IActionResult Register(string email, string password, string fullname, UserType role)
+        public IActionResult Register(RegisterViewModel model)
         {
-            if (m_userService.Register(email, password, fullname, role))
+            if (!ModelState.IsValid)
+                return View(model);
+            if (m_userService.Register(model.Email, model.Password, model.FullName, model.Role, model.Nif))
                 return RedirectToAction("Login");
             ViewBag.Error = "Utilizador já existe!";
             return View();
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login", "Auth");
         }
     }
 }

@@ -1,21 +1,40 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Refeitorio.Models;
+using Refeitorio.Services;
+using Refeitorio.ViewModels;
 
 namespace Refeitorio.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly UserService m_userService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(UserService userService)
         {
-            _logger = logger;
+            m_userService = userService;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var role = HttpContext.Session.GetString("Role");
+            if (role == "Admin")
+            {
+                var vm = new AdminPendingUsersViewModel
+                {
+                    PendingUsers = m_userService.GetPendingUsers()
+                };
+                return View(vm);
+            }
+
+            return View(new AdminPendingUsersViewModel());
+        }
+
+        [HttpPost]
+        public IActionResult ApproveUser(Guid id)
+        {
+            m_userService.ApproveUser(id);
+            return RedirectToAction("Index");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -48,6 +48,7 @@ body {
 
 #btnRegistar {
     background: white;
+    color: black;
     transition: 0.3s;
     padding-top: 6px;
     padding-bottom: 6px;
@@ -68,4 +69,26 @@ body {
     filter: brightness(0.9);
     border: none;
     margin: 5px;
+}
+
+.error-span {
+    height: 25px;
+}
+
+.error-span span {
+    margin: 0;
+    padding: 0;
+}
+
+.login-plate-register {
+    display: flex;
+    height: 550px;
+    width: 350px;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.login-plate-register form {
+    text-align: center;
 }
