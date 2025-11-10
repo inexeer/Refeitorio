@@ -1,0 +1,70 @@
+﻿@model Refeitorio.Models.MenuWeek
+@using Refeitorio.Models
+@{
+    var selectedOption = (MenuOption?)ViewBag.SelectedOption ?? MenuOption.Normal;
+    var weeks = (List<int>)ViewBag.Weeks ?? new List<int> { Model.WeekNumber };
+    var selectedWeek = (int)ViewBag.SelectedWeek;
+    var bookings = (List<Booking>)ViewBag.Bookings ?? new List<Booking>();
+}
+<h2 class="text-2xl font-bold text-amber-600 mb-4">Menu Semanal - Semana @Model.WeekNumber</h2>
+
+<!-- Botões para Normal / Vegetariano -->
+<div class="mb-4">
+    <a class="px-3 py-1 mr-2 rounded @(selectedOption == MenuOption.Normal ? "bg-amber-600 text-white" : "bg-gray-200")"
+       href="@Url.Action("Index", new { option = "Normal", week = selectedWeek })">Normal</a>
+
+    <a class="px-3 py-1 rounded @(selectedOption == MenuOption.Vegetariano ? "bg-amber-600 text-white" : "bg-gray-200")"
+       href="@Url.Action("Index", new { option = "Vegetariano", week = selectedWeek })">Vegetariano</a>
+</div>
+
+<!-- Abas de semanas -->
+<div class="mb-4">
+    @foreach (var w in weeks)
+    {
+        <a class="px-3 py-1 mr-2 rounded @(w == selectedWeek ? "bg-amber-500 text-white" : "bg-gray-200")"
+           href="@Url.Action("Index", new { option = selectedOption.ToString(), week = w })">Semana @w</a>
+    }
+</div>
+
+@if (TempData["Message"] != null)
+{
+    <div class="mb-4 p-2 bg-green-100 text-green-800 rounded">@TempData["Message"]</div>
+}
+
+@if (Model.MenuDays?.Any() == true)
+{
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        @foreach (MenuDay day in Model.MenuDays)
+        {
+            var alreadyBooked = bookings.Any(b => b.DayId == day.Id);
+            <div class="border rounded-lg p-4 shadow-md bg-white">
+                <h3 class="text-lg font-semibold text-amber-700">@day.Weekday</h3>
+                <p><strong>Tipo:</strong> @day.Option</p>
+                <p><strong>Prato principal:</strong> @day.MainDish</p>
+                <p><strong>Sopa:</strong> @day.Soup</p>
+                <p><strong>Sobremesa:</strong> @day.Dessert</p>
+
+                <div class="mt-3">
+                    @if (alreadyBooked)
+                    {
+                        <button class="px-3 py-1 bg-gray-300 text-gray-700 rounded" disabled>Já marcado</button>
+                    }
+                    else
+                    {
+                        <form asp-controller="Menu" asp-action="Book" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="dayId" value="@day.Id" />
+                            <input type="hidden" name="weekNumber" value="@day.Weekday" />
+                            <input type="hidden" name="option" value="@day.Option" />
+                            <button type="submit" class="px-3 py-1 bg-amber-600 text-white rounded">Marcar</button>
+                        </form>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>Não há menu disponível esta semana.</p>
+}
