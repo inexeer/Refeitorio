@@ -1,4 +1,8 @@
-﻿namespace Refeitorio.Services
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Refeitorio.Services
 {
     public static class BookingRules
     {
@@ -24,6 +28,14 @@
             }
 
             return bookingDateTime.Date > today;
+        }
+
+        // verifica se já existe alguma marcação na mesma data
+        // existingBookingDates: datas das marcações já existentes do utilizador
+        public static bool HasConflictByDate(DateTime newBookingDate, IEnumerable<DateTime> existingBookingDates)
+        {
+            if (existingBookingDates == null) return false;
+            return existingBookingDates.Any(d => d.Date == newBookingDate.Date);
         }
     }
 }

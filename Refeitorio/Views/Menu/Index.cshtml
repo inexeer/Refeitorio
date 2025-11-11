@@ -1,70 +1,72 @@
 ﻿@model Refeitorio.Models.MenuWeek
-@using Refeitorio.Models
+
 @{
-    var selectedOption = (MenuOption?)ViewBag.SelectedOption ?? MenuOption.Normal;
-    var weeks = (List<int>)ViewBag.Weeks ?? new List<int> { Model.WeekNumber };
-    var selectedWeek = (int)ViewBag.SelectedWeek;
-    var bookings = (List<Booking>)ViewBag.Bookings ?? new List<Booking>();
+    ViewData["Title"] = "Menu Semanal";
+    var selectedOption = (ViewBag.SelectedOption as string) ?? "Normal"; // Normal, Vegetariano ou All
+    var weeks = ViewBag.Weeks as List<int> ?? new List<int>();
+    var weekRanges = ViewBag.WeekRanges as Dictionary<int, string> ?? new Dictionary<int, string>();
+    var currentRange = ViewBag.CurrentWeekRange as string ?? "";
 }
-<h2 class="text-2xl font-bold text-amber-600 mb-4">Menu Semanal - Semana @Model.WeekNumber</h2>
-
-<!-- Botões para Normal / Vegetariano -->
-<div class="mb-4">
-    <a class="px-3 py-1 mr-2 rounded @(selectedOption == MenuOption.Normal ? "bg-amber-600 text-white" : "bg-gray-200")"
-       href="@Url.Action("Index", new { option = "Normal", week = selectedWeek })">Normal</a>
-
-    <a class="px-3 py-1 rounded @(selectedOption == MenuOption.Vegetariano ? "bg-amber-600 text-white" : "bg-gray-200")"
-       href="@Url.Action("Index", new { option = "Vegetariano", week = selectedWeek })">Vegetariano</a>
-</div>
-
-<!-- Abas de semanas -->
-<div class="mb-4">
-    @foreach (var w in weeks)
-    {
-        <a class="px-3 py-1 mr-2 rounded @(w == selectedWeek ? "bg-amber-500 text-white" : "bg-gray-200")"
-           href="@Url.Action("Index", new { option = selectedOption.ToString(), week = w })">Semana @w</a>
-    }
-</div>
 
 @if (TempData["Message"] != null)
 {
-    <div class="mb-4 p-2 bg-green-100 text-green-800 rounded">@TempData["Message"]</div>
+    <div class="alert alert-info">@TempData["Message"]</div>
 }
 
-@if (Model.MenuDays?.Any() == true)
-{
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        @foreach (MenuDay day in Model.MenuDays)
-        {
-            var alreadyBooked = bookings.Any(b => b.DayId == day.Id);
-            <div class="border rounded-lg p-4 shadow-md bg-white">
-                <h3 class="text-lg font-semibold text-amber-700">@day.Weekday</h3>
-                <p><strong>Tipo:</strong> @day.Option</p>
-                <p><strong>Prato principal:</strong> @day.MainDish</p>
-                <p><strong>Sopa:</strong> @day.Soup</p>
-                <p><strong>Sobremesa:</strong> @day.Dessert</p>
+<!-- Selector de opção -->
+<div class="mb-3">
+    <a class="btn btn-outline-primary @(selectedOption == "Normal" ? "active" : "")"
+       asp-controller="Menu" asp-action="Index" asp-route-week="@Model.WeekNumber" asp-route-option="Normal">Normal</a>
 
-                <div class="mt-3">
-                    @if (alreadyBooked)
+    <a class="btn btn-outline-primary @(selectedOption == "Vegetariano" ? "active" : "")"
+       asp-controller="Menu" asp-action="Index" asp-route-week="@Model.WeekNumber" asp-route-option="Vegetariano">Vegetariano</a>
+
+    <a class="btn btn-outline-secondary @(selectedOption == "All" ? "active" : "")"
+       asp-controller="Menu" asp-action="Index" asp-route-week="@Model.WeekNumber" asp-route-option="All">Mostrar ambos</a>
+</div>
+
+<!-- Abas de semanas (preservam a opção selecionada) -->
+<ul class="nav nav-tabs mb-3">
+    @foreach (var w in weeks)
+    {
+        var active = w == Model.WeekNumber ? "active" : "";
+        var label = weekRanges.ContainsKey(w) ? $"Semana {w} - {weekRanges[w]}" : $"Semana {w}";
+        <li class="nav-item">
+            <a class="nav-link @active" asp-controller="Menu" asp-action="Index" asp-route-week="@w" asp-route-option="@selectedOption">@label</a>
+        </li>
+    }
+</ul>
+
+<div class="row">
+    @* Agrupar por dia (weekday+date) para mostrar Normal/Vegetariano juntos quando "All" *@
+    @foreach (var dayGroup in Model.MenuDays.GroupBy(d => new { d.Weekday, d.Date }).Select(g => g.ToList()))
+    {
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">@dayGroup.First().Weekday - @dayGroup.First().Date.ToString("dd/MM/yyyy")</h5>
+
+                    @foreach (var opt in dayGroup)
                     {
-                        <button class="px-3 py-1 bg-gray-300 text-gray-700 rounded" disabled>Já marcado</button>
-                    }
-                    else
-                    {
-                        <form asp-controller="Menu" asp-action="Book" method="post">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="dayId" value="@day.Id" />
-                            <input type="hidden" name="weekNumber" value="@day.Weekday" />
-                            <input type="hidden" name="option" value="@day.Option" />
-                            <button type="submit" class="px-3 py-1 bg-amber-600 text-white rounded">Marcar</button>
-                        </form>
+                        <div class="mb-2">
+                            <strong>(@opt.Option)</strong>
+                            <p class="mb-0">@opt.MainDish</p>
+                            <p class="mb-0">Sopa: @opt.Soup</p>
+                            <p class="mb-1">Doce: @opt.Dessert</p>
+
+                            <form asp-controller="Menu" asp-action="Book" method="post" class="d-inline">
+                                <input type="hidden" name="dayId" value="@opt.Id" />
+                                <input type="hidden" name="weekNumber" value="@Model.WeekNumber" />
+                                <input type="hidden" name="option" value="@opt.Option" />
+                                @* preservar a opção que estava seleccionada ("All" ou "Normal") para redirecionar corretamente *@
+                                <input type="hidden" name="returnOption" value="@selectedOption" />
+                                <button class="btn btn-primary btn-sm" type="submit">Marcar almoço</button>
+                            </form>
+                        </div>
+                        <hr />
                     }
                 </div>
             </div>
-        }
-    </div>
-}
-else
-{
-    <p>Não há menu disponível esta semana.</p>
-}
+        </div>
+    }
+</div>

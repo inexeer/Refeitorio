@@ -16,5 +16,32 @@
     "Role": 0,
     "Nif": "111111111",
     "IsApproved": true
+  },
+  {
+    "Id": "c6cbe3f3-0e47-44fe-8abc-1b0b31b57723",
+    "FullName": "Rafa",
+    "Email": "i230071@inete.net",
+    "PasswordHash": "73l8gRjwLftklgfdXT\u002BMdiMEjJwGPVMsyVxe16iYpk8=",
+    "Role": 3,
+    "Nif": "123456780",
+    "IsApproved": true
+  },
+  {
+    "Id": "89cfd3bf-2e68-4ae0-ae3b-5959023eebf7",
+    "FullName": "Nikito",
+    "Email": "i230070@inete.net",
+    "PasswordHash": "73l8gRjwLftklgfdXT\u002BMdiMEjJwGPVMsyVxe16iYpk8=",
+    "Role": 0,
+    "Nif": "123456782",
+    "IsApproved": true
+  },
+  {
+    "Id": "61eac640-80f8-4446-8da8-91e675d07ac9",
+    "FullName": "Ros\u00E1ria",
+    "Email": "i230072@inete.net",
+    "PasswordHash": "73l8gRjwLftklgfdXT\u002BMdiMEjJwGPVMsyVxe16iYpk8=",
+    "Role": 3,
+    "Nif": "123456744",
+    "IsApproved": true
   }
 ]
