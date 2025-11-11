@@ -43,5 +43,23 @@
     "Role": 3,
     "Nif": "123456744",
     "IsApproved": true
+  },
+  {
+    "Id": "85d8bf65-924c-4951-bdd8-7e4ebab04b1e",
+    "FullName": "Nikita ClaroEpta",
+    "Email": "nikita@inete.net",
+    "PasswordHash": "WuhfYgIpd0\u002Bf2Xuzp\u002BgsQFcpGoMjqO5cpQ/mXyWoQyQ=",
+    "Role": 3,
+    "Nif": "987987654",
+    "IsApproved": true
+  },
+  {
+    "Id": "846c913c-1cf0-44a1-bdff-7c75903d08d9",
+    "FullName": "Mano Manov",
+    "Email": "mano@inete.net",
+    "PasswordHash": "WuhfYgIpd0\u002Bf2Xuzp\u002BgsQFcpGoMjqO5cpQ/mXyWoQyQ=",
+    "Role": 1,
+    "Nif": "987345675",
+    "IsApproved": true
   }
 ]

@@ -4,147 +4,129 @@
     ViewData["Title"] = "Home Page";
 
     // tentar obter dados do controlador (fornecidos por HomeController)
-    var userName = ViewBag.UserName as string;
-    var userInitials = ViewBag.UserInitials as string;
+    // var userName = ViewBag.UserName as string;
+    // var userInitials = ViewBag.UserInitials as string;
 
-    // se não estiverem definidos, tentamos obter do Session (email) e criar iniciais
-    var sessionEmail = Context.Session.GetString("User");
-    if (string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(sessionEmail))
-    {
-        // usar o email como fallback para mostrar algo
-        userName = sessionEmail;
-    }
-    if (string.IsNullOrEmpty(userInitials))
-    {
-        if (!string.IsNullOrEmpty(userName))
-        {
-            var parts = userName.Split(' ', System.StringSplitOptions.RemoveEmptyEntries);
-            if (parts.Length >= 2)
-            {
-                userInitials = $"{parts[0][0]}{parts[^1][0]}".ToUpper();
-            }
-            else if (parts.Length == 1)
-            {
-                userInitials = $"{parts[0][0]}".ToUpper();
-            }
-        }
-        else if (!string.IsNullOrEmpty(sessionEmail))
-        {
-            userInitials = $"{sessionEmail[0]}".ToUpper();
-        }
-        else
-        {
-            userInitials = "U";
-        }
-    }
+    // // se não estiverem definidos, tentamos obter do Session (email) e criar iniciais
+    // var sessionEmail = Context.Session.GetString("User");
+    // if (string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(sessionEmail))
+    // {
+    //     // usar o email como fallback para mostrar algo
+    //     userName = sessionEmail;
+    // }
+    // if (string.IsNullOrEmpty(userInitials))
+    // {
+    //     if (!string.IsNullOrEmpty(userName))
+    //     {
+    //         var parts = userName.Split(' ', System.StringSplitOptions.RemoveEmptyEntries);
+    //         if (parts.Length >= 2)
+    //         {
+    //             userInitials = $"{parts[0][0]}{parts[^1][0]}".ToUpper();
+    //         }
+    //         else if (parts.Length == 1)
+    //         {
+    //             userInitials = $"{parts[0][0]}".ToUpper();
+    //         }
+    //     }
+    //     else if (!string.IsNullOrEmpty(sessionEmail))
+    //     {
+    //         userInitials = $"{sessionEmail[0]}".ToUpper();
+    //     }
+    //     else
+    //     {
+    //         userInitials = "U";
+    //     }
+    // }
 
     var role = Context.Session.GetString("Role");
+    Layout = "../Shared/_LayoutNavBar.cshtml";
 }
 
-<div class="container-fluid p-0">
-    @* Top bar: colocar o avatar no canto superior direito (visível em todas as resoluções) *@
-    <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom" style="background:#fff;">
-        <div>
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" style="color:#222;">Refeitorio</a>
-        </div>
 
-        <div class="d-flex align-items-center gap-2">
-            <div class="text-end me-3 d-none d-md-block">
-                <div style="font-weight:600;">@userName</div>
-                <div style="font-size:0.85rem;color:#666;">@role</div>
+<div class="container mt-4">
+    @if (role == "Admin")
+    {
+        <h2>Dashboard</h2>
+        <p>Bem vindo!</p>
+        <partial name="_AdminPendingUsers" model="Model" />
+    }
+    else
+    {
+        <!-- Header -->
+        <header class="bg-amber-500 shadow-md mb-4">
+            <div class="max-w-6xl mx-auto d-flex justify-content-between align-items-center p-4" style="display:flex;align-items:center;justify-content:space-between;">
+                <h1 class="text-2xl font-bold text-white" style="margin:0;">Bar do Inete</h1>
+                <nav class="d-flex gap-3">
+                    <a href="#menu" class="text-white" style="text-decoration:none;margin-right:16px;">Menu</a>
+                    <a href="#horario" class="text-white" style="text-decoration:none;margin-right:16px;">Horário</a>
+                    <a href="#contactos" class="text-white" style="text-decoration:none;">Contactos</a>
+                </nav>
             </div>
+        </header>
 
-            <div class="rounded-circle bg-amber-500 text-white d-flex justify-content-center align-items-center"
-                 style="width:44px;height:44px;font-weight:700;">
-                @userInitials
+        <!-- Hero -->
+        <section class="bg-yellow-100 py-5 text-center mb-4" style="padding-top:48px;padding-bottom:48px;">
+            <h2 class="text-4xl font-extrabold text-amber-700 mb-3">Bem-vindo ao Bar da Escola!</h2>
+            <p class="text-lg text-gray-700 mb-4">Comida barata e boa, feita apenas para ti!</p>
+            <a asp-controller="Menu" asp-action="Index"
+                class="inline-block px-4 py-2 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition"
+                style="text-decoration:none;">
+                🍽️ Ver Menu Semanal / Marcar Almoço
+            </a>
+        </section>
+
+        <!-- Menu (pequeno resumo) -->
+        <section id="menu" class="mb-4">
+            <h3 class="text-3xl font-bold text-amber-600 mb-3">Menu do Dia</h3>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="bg-white rounded-xl shadow-md p-3 text-center mb-3">
+                        <h4 class="font-semibold text-lg mb-1">Sandes Mistas</h4>
+                        <p class="text-gray-600 mb-1">Pão fresco com queijo e fiambre</p>
+                        <span class="text-amber-600 font-bold">1,20 €</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="bg-white rounded-xl shadow-md p-3 text-center mb-3">
+                        <h4 class="font-semibold text-lg mb-1">Tosta de Atum</h4>
+                        <p class="text-gray-600 mb-1">Tosta quente com atum e maionese</p>
+                        <span class="text-amber-600 font-bold">1,80 €</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="bg-white rounded-xl shadow-md p-3 text-center mb-3">
+                        <h4 class="font-semibold text-lg mb-1">Sumo Natural</h4>
+                        <p class="text-gray-600 mb-1">Laranja, ananás ou maçã</p>
+                        <span class="text-amber-600 font-bold">1,00 €</span>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <div class="container mt-4">
-        @if (role == "Admin")
-        {
-            <h2>Dashboard</h2>
-            <p>Bem vindo!</p>
-            <partial name="_AdminPendingUsers" model="Model" />
-        }
-        else
-        {
-            <!-- Header -->
-            <header class="bg-amber-500 shadow-md mb-4">
-                <div class="max-w-6xl mx-auto d-flex justify-content-between align-items-center p-4" style="display:flex;align-items:center;justify-content:space-between;">
-                    <h1 class="text-2xl font-bold text-white" style="margin:0;">Bar do Inete</h1>
-                    <nav class="d-flex gap-3">
-                        <a href="#menu" class="text-white" style="text-decoration:none;margin-right:16px;">Menu</a>
-                        <a href="#horario" class="text-white" style="text-decoration:none;margin-right:16px;">Horário</a>
-                        <a href="#contactos" class="text-white" style="text-decoration:none;">Contactos</a>
-                    </nav>
-                </div>
-            </header>
+        <!-- Horário -->
+        <section id="horario" class="bg-amber-100 py-3 mb-4 text-center">
+            <h3 class="text-3xl font-bold text-amber-700 mb-2">Horário de Funcionamento</h3>
+            <p class="text-lg">Segunda a Sexta: <strong>8h às 18h</strong></p>
+            <p class="text-lg">Sábado e Domingo: <strong>Fechado</strong></p>
+        </section>
 
-            <!-- Hero -->
-            <section class="bg-yellow-100 py-5 text-center mb-4" style="padding-top:48px;padding-bottom:48px;">
-                <h2 class="text-4xl font-extrabold text-amber-700 mb-3">Bem-vindo ao Bar da Escola!</h2>
-                <p class="text-lg text-gray-700 mb-4">Comida barata e boa, feita apenas para ti!</p>
-                <a asp-controller="Menu" asp-action="Index"
-                   class="inline-block px-4 py-2 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition"
-                   style="text-decoration:none;">
-                    🍽️ Ver Menu Semanal / Marcar Almoço
-                </a>
-            </section>
+        <!-- Contactos -->
+        <section id="contactos" class="mb-4">
+            <h3 class="text-3xl font-bold text-amber-600 mb-2 text-center">Contactos</h3>
+            <div class="text-center text-gray-700">
+                <p class="mb-1">📍 INETE, Lisboa</p>
+                <p class="mb-1">📞 912 345 678</p>
+                <p>📧 bardoinete@email.com</p>
+            </div>
+        </section>
 
-            <!-- Menu (pequeno resumo) -->
-            <section id="menu" class="mb-4">
-                <h3 class="text-3xl font-bold text-amber-600 mb-3">Menu do Dia</h3>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="bg-white rounded-xl shadow-md p-3 text-center mb-3">
-                            <h4 class="font-semibold text-lg mb-1">Sandes Mistas</h4>
-                            <p class="text-gray-600 mb-1">Pão fresco com queijo e fiambre</p>
-                            <span class="text-amber-600 font-bold">1,20 €</span>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="bg-white rounded-xl shadow-md p-3 text-center mb-3">
-                            <h4 class="font-semibold text-lg mb-1">Tosta de Atum</h4>
-                            <p class="text-gray-600 mb-1">Tosta quente com atum e maionese</p>
-                            <span class="text-amber-600 font-bold">1,80 €</span>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="bg-white rounded-xl shadow-md p-3 text-center mb-3">
-                            <h4 class="font-semibold text-lg mb-1">Sumo Natural</h4>
-                            <p class="text-gray-600 mb-1">Laranja, ananás ou maçã</p>
-                            <span class="text-amber-600 font-bold">1,00 €</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Horário -->
-            <section id="horario" class="bg-amber-100 py-3 mb-4 text-center">
-                <h3 class="text-3xl font-bold text-amber-700 mb-2">Horário de Funcionamento</h3>
-                <p class="text-lg">Segunda a Sexta: <strong>8h às 18h</strong></p>
-                <p class="text-lg">Sábado e Domingo: <strong>Fechado</strong></p>
-            </section>
-
-            <!-- Contactos -->
-            <section id="contactos" class="mb-4">
-                <h3 class="text-3xl font-bold text-amber-600 mb-2 text-center">Contactos</h3>
-                <div class="text-center text-gray-700">
-                    <p class="mb-1">📍 INETE, Lisboa</p>
-                    <p class="mb-1">📞 912 345 678</p>
-                    <p>📧 bardoinete@email.com</p>
-                </div>
-            </section>
-
-            <!-- Footer -->
-            <footer class="bg-amber-500 text-white text-center py-3 mt-4">
-                <p class="mb-0">© 2025 Bar da Escola — Feito pelo TGPSI2301</p>
-            </footer>
-        }
-    </div>
+        <!-- Footer -->
+        <footer class="bg-amber-500 text-white text-center py-3 mt-4">
+            <p class="mb-0">© 2025 Bar da Escola — Feito pelo TGPSI2301</p>
+        </footer>
+    }
 </div>
+
 
 <form asp-controller="Auth" asp-action="Logout" method="post" style="display:inline">
     <button type="submit" class="btn btn-danger" style="position:fixed;left:20px;bottom:20px;">Logout</button>

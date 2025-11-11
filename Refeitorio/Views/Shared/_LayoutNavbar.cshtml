@@ -1,0 +1,81 @@
+﻿@inject Refeitorio.Services.UserService userService
+@{
+    // tentar obter dados do controlador (fornecidos por HomeController)
+    // var userName = ViewBag.UserName as string;
+    var userInitials = ViewBag.UserInitials as string;
+
+    // se não estiverem definidos, tentamos obter do Session (email) e criar iniciais
+    var sessionEmail = Context.Session.GetString("User");
+    var userName = userService.GetUserByEmail(sessionEmail)?.FullName;
+    if (string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(sessionEmail))
+    {
+        // usar o email como fallback para mostrar algo
+        userName = sessionEmail;
+    }
+    if (string.IsNullOrEmpty(userInitials))
+    {
+        if (!string.IsNullOrEmpty(userName))
+        {
+            var parts = userName.Split(' ', System.StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length >= 2)
+            {
+                userInitials = $"{parts[0][0]}{parts[^1][0]}".ToUpper();
+            }
+            else if (parts.Length == 1)
+            {
+                userInitials = $"{parts[0][0]}".ToUpper();
+            }
+        }
+        else if (!string.IsNullOrEmpty(sessionEmail))
+        {
+            userInitials = $"{sessionEmail[0]}".ToUpper();
+        }
+        else
+        {
+            userInitials = "U";
+        }
+    }
+    var role = Context.Session.GetString("Role");
+}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] - Refeitorio</title>
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/Refeitorio.styles.css" asp-append-version="true" />
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body>
+        <header>
+            <div class="container-fluid p-0">
+                @* Top bar: colocar o avatar no canto superior direito (visível em todas as resoluções) *@
+                <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom" style="background:#fff;">
+                    <div>
+                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" style="color:#222;">Início</a>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="text-end me-3 d-none d-md-block">
+                            <div style="font-weight:600;">@userName</div>
+                            <div style="font-size:0.85rem;color:#666;">@role</div>
+                        </div>
+
+                        <div class="rounded-circle bg-amber-500 text-white d-flex justify-content-center align-items-center"
+                             style="width:44px;height:44px;font-weight:700;">
+                            @userInitials
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    </body>
+</html>

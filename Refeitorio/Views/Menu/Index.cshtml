@@ -6,23 +6,23 @@
     var weeks = ViewBag.Weeks as List<int> ?? new List<int>();
     var weekRanges = ViewBag.WeekRanges as Dictionary<int, string> ?? new Dictionary<int, string>();
     var currentRange = ViewBag.CurrentWeekRange as string ?? "";
+    Layout = "../Shared/_LayoutNavbar.cshtml";
 }
 
 @if (TempData["Message"] != null)
 {
     <div class="alert alert-info">@TempData["Message"]</div>
 }
-
 <!-- Selector de opção -->
 <div class="mb-3">
     <a class="btn btn-outline-primary @(selectedOption == "Normal" ? "active" : "")"
-       asp-controller="Menu" asp-action="Index" asp-route-week="@Model.WeekNumber" asp-route-option="Normal">Normal</a>
+        asp-controller="Menu" asp-action="Index" asp-route-week="@Model.WeekNumber" asp-route-option="Normal">Normal</a>
 
     <a class="btn btn-outline-primary @(selectedOption == "Vegetariano" ? "active" : "")"
-       asp-controller="Menu" asp-action="Index" asp-route-week="@Model.WeekNumber" asp-route-option="Vegetariano">Vegetariano</a>
+        asp-controller="Menu" asp-action="Index" asp-route-week="@Model.WeekNumber" asp-route-option="Vegetariano">Vegetariano</a>
 
     <a class="btn btn-outline-secondary @(selectedOption == "All" ? "active" : "")"
-       asp-controller="Menu" asp-action="Index" asp-route-week="@Model.WeekNumber" asp-route-option="All">Mostrar ambos</a>
+        asp-controller="Menu" asp-action="Index" asp-route-week="@Model.WeekNumber" asp-route-option="All">Mostrar ambos</a>
 </div>
 
 <!-- Abas de semanas (preservam a opção selecionada) -->
