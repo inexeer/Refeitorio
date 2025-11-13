@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Refeitorio.Models;
 using Refeitorio.Services;
@@ -15,9 +16,28 @@ namespace Refeitorio.Controllers
             m_userService = userService;
         }
 
+        public IActionResult AdminPendingUsers()
+        {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Admin")
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            var vm = new AdminPendingUsersViewModel
+            {
+                PendingUsers = m_userService.GetPendingUsers()
+            };
+            return PartialView("_AdminPendingUsers", vm);
+        }
+
         public IActionResult Index()
         {
             var role = HttpContext.Session.GetString("Role");
+            if (string.IsNullOrEmpty(role) || (role != "Admin" && role != "Staff" && role != "Student"))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
             // obter o nome do utilizador (se estiver logado)
             var userEmail = HttpContext.Session.GetString("User");
             if (!string.IsNullOrEmpty(userEmail))
@@ -35,14 +55,14 @@ namespace Refeitorio.Controllers
                 }
             }
 
-            if (role == "Admin")
-            {
-                var vm = new AdminPendingUsersViewModel
-                {
-                    PendingUsers = m_userService.GetPendingUsers()
-                };
-                return View(vm);
-            }
+            //if (role == "Admin")
+            //{
+            //    var vm = new AdminPendingUsersViewModel
+            //    {
+            //        PendingUsers = m_userService.GetPendingUsers()
+            //    };
+            //    return View(vm);
+            //}
 
             return View(new AdminPendingUsersViewModel());
         }

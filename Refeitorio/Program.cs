@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Refeitorio.Services;
 
 var builder = WebApplication.CreateBuilder(args);

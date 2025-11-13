@@ -61,5 +61,14 @@
     "Role": 1,
     "Nif": "987345675",
     "IsApproved": true
+  },
+  {
+    "Id": "1786e451-df5f-41d7-8d8c-f07f11ac551b",
+    "FullName": "DONT APPROVE",
+    "Email": "DONOTAPPROVE@inete.net",
+    "PasswordHash": "WuhfYgIpd0\u002Bf2Xuzp\u002BgsQFcpGoMjqO5cpQ/mXyWoQyQ=",
+    "Role": 3,
+    "Nif": "987576421",
+    "IsApproved": false
   }
 ]

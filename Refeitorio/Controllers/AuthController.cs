@@ -2,6 +2,7 @@
 using Refeitorio.Models;
 using Refeitorio.ViewModels;
 using Refeitorio.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Refeitorio.Controllers
 {
