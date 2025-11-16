@@ -47,8 +47,8 @@
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/Refeitorio.styles.css" asp-append-version="true" />
-        <script src="https://cdn.tailwindcss.com"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body>
         <header>
@@ -63,6 +63,12 @@
                     {
                         <div>
                             <a class="nav-item" href="#" id="pedidosBtn">Pedidos de registo</a>
+                        </div>
+                        <div>
+                            <a class="nav-item" href="#" id="gerirMenusBtn">Gerir menus</a>
+                        </div>
+                        <div>
+                            <a class="nav-item" href="#" id="criarMenuBtn">Criar menu</a>
                         </div>
                     }
 
@@ -85,16 +91,7 @@
                 @RenderBody()
             </main>
         </div>
-        <script>
-            $(function () {
-                $("#pedidosBtn").click(function (e) {
-                    e.preventDefault();
-
-                    $.get("/Home/AdminPendingUsers", function (data) {
-                        $("#page-content").html(data);
-                    });
-                });
-            });
-        </script>
+        <script src="~/js/adminNavbar.js"></script>
+        <script src="~/js/adminCreateMenus.js"></script>
     </body>
 </html>

@@ -1,0 +1,26 @@
+﻿@model Refeitorio.Models.MenuWeek
+
+<h2>Criar almoço</h2>
+
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>Opção</th>
+			<th>Prato</th>
+			<th>Sopa</th>
+			<th>Sobremesa</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var lunch in Model.MenuDays) {
+			<tr>
+				<td>@lunch.Id</td>
+				<td>@lunch.Option</td>
+				<td>@lunch.MainDish</td>
+				<td>@lunch.Soup</td>
+				<td>@lunch.Dessert</td>
+			</tr>
+		}
+	</tbody>
+</table>

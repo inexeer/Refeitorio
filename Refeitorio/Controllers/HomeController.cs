@@ -31,6 +31,33 @@ namespace Refeitorio.Controllers
             return PartialView("_AdminPendingUsers", vm);
         }
 
+        public IActionResult AdminCreateMenus()
+        {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Admin")
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+            return PartialView("_AdminCreateMenus");
+        }
+
+        public IActionResult AdminCreateLunch()
+        {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Admin")
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            var menu = new MenuWeek
+            {
+                Id = 1,
+                WeekNumber = 0,
+                MenuDays = MenuRepository.GetAllWeeks()[0].MenuDays
+            };
+            return PartialView("_AdminCreateLunch", menu);
+        }
+
         public IActionResult Index()
         {
             var role = HttpContext.Session.GetString("Role");

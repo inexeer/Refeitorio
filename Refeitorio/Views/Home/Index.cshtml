@@ -3,41 +3,6 @@
 @{
     ViewData["Title"] = "Home Page";
 
-    // tentar obter dados do controlador (fornecidos por HomeController)
-    // var userName = ViewBag.UserName as string;
-    // var userInitials = ViewBag.UserInitials as string;
-
-    // // se não estiverem definidos, tentamos obter do Session (email) e criar iniciais
-    // var sessionEmail = Context.Session.GetString("User");
-    // if (string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(sessionEmail))
-    // {
-    //     // usar o email como fallback para mostrar algo
-    //     userName = sessionEmail;
-    // }
-    // if (string.IsNullOrEmpty(userInitials))
-    // {
-    //     if (!string.IsNullOrEmpty(userName))
-    //     {
-    //         var parts = userName.Split(' ', System.StringSplitOptions.RemoveEmptyEntries);
-    //         if (parts.Length >= 2)
-    //         {
-    //             userInitials = $"{parts[0][0]}{parts[^1][0]}".ToUpper();
-    //         }
-    //         else if (parts.Length == 1)
-    //         {
-    //             userInitials = $"{parts[0][0]}".ToUpper();
-    //         }
-    //     }
-    //     else if (!string.IsNullOrEmpty(sessionEmail))
-    //     {
-    //         userInitials = $"{sessionEmail[0]}".ToUpper();
-    //     }
-    //     else
-    //     {
-    //         userInitials = "U";
-    //     }
-    // }
-
     var role = Context.Session.GetString("Role");
     Layout = "../Shared/_LayoutNavBar.cshtml";
 }
