@@ -37,36 +37,4 @@
     }
 </ul>
 
-<div class="row">
-    @* Agrupar por dia (weekday+date) para mostrar Normal/Vegetariano juntos quando "All" *@
-    @foreach (var dayGroup in Model.MenuDays.GroupBy(d => new { d.Weekday, d.Date }).Select(g => g.ToList()))
-    {
-        <div class="col-md-4">
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">@dayGroup.First().Weekday - @dayGroup.First().Date.ToString("dd/MM/yyyy")</h5>
 
-                    @foreach (var opt in dayGroup)
-                    {
-                        <div class="mb-2">
-                            <strong>(@opt.Option)</strong>
-                            <p class="mb-0">@opt.MainDish</p>
-                            <p class="mb-0">Sopa: @opt.Soup</p>
-                            <p class="mb-1">Doce: @opt.Dessert</p>
-
-                            <form asp-controller="Menu" asp-action="Book" method="post" class="d-inline">
-                                <input type="hidden" name="dayId" value="@opt.Id" />
-                                <input type="hidden" name="weekNumber" value="@Model.WeekNumber" />
-                                <input type="hidden" name="option" value="@opt.Option" />
-                                @* preservar a opção que estava seleccionada ("All" ou "Normal") para redirecionar corretamente *@
-                                <input type="hidden" name="returnOption" value="@selectedOption" />
-                                <button class="btn btn-primary btn-sm" type="submit">Marcar almoço</button>
-                            </form>
-                        </div>
-                        <hr />
-                    }
-                </div>
-            </div>
-        </div>
-    }
-</div>

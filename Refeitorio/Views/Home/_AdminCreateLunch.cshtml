@@ -1,4 +1,4 @@
-﻿@model Refeitorio.Models.MenuWeek
+﻿@model Refeitorio.Models.ListMenus
 
 <h2>Criar almoço</h2>
 
@@ -13,14 +13,33 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach (var lunch in Model.MenuDays) {
+		@foreach (var lunch in Model.Menus) {
 			<tr>
 				<td>@lunch.Id</td>
 				<td>@lunch.Option</td>
 				<td>@lunch.MainDish</td>
 				<td>@lunch.Soup</td>
 				<td>@lunch.Dessert</td>
+				<td>
+					<form asp-controller="Home" asp-action="DeleteLunch" method="post" class="d-inline">
+						<input type="hidden" name="id" value="@lunch.Id" />
+						<button type="submit" class="btn btn-success btn-sm">Apagar</button>
+					</form>
+				</td>
 			</tr>
 		}
 	</tbody>
 </table>
+<div class="d-flex">
+	<button type="button" class="btn btn-primary" id="btnCriar">Criar</button>
+</div>
+<script>
+	document.getElementById("btnCriar").addEventListener("click", function () {
+		fetch("/Home/AdminLunchForm")
+			.then(response => response.text())
+			.then(html => {
+				// This replaces the ENTIRE main content with the form
+				document.getElementById("page-content").innerHTML = html;
+			});
+	});
+</script>

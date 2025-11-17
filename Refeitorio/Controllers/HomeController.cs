@@ -10,10 +10,11 @@ namespace Refeitorio.Controllers
     public class HomeController : Controller
     {
         private readonly UserService m_userService;
-
-        public HomeController(UserService userService)
+        private readonly AdminMenuService m_menuService;
+        public HomeController(UserService userService, AdminMenuService menuService)
         {
             m_userService = userService;
+            m_menuService = menuService;
         }
 
         public IActionResult AdminPendingUsers()
@@ -49,14 +50,52 @@ namespace Refeitorio.Controllers
                 return RedirectToAction("Login", "Auth");
             }
 
-            var menu = new MenuWeek
+            var model = new ListMenus 
             {
-                Id = 1,
-                WeekNumber = 0,
-                MenuDays = MenuRepository.GetAllWeeks()[0].MenuDays
+                Menus = m_menuService.Menus
             };
-            return PartialView("_AdminCreateLunch", menu);
+
+            return PartialView("_AdminCreateLunch", model);
         }
+
+        public IActionResult AdminLunchForm()
+        {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Admin")
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+            return PartialView("_AdminLunchForm");
+        }
+
+        [HttpPost]
+        public IActionResult Create(MenuDay model)
+        {
+            if (ModelState.IsValid){
+                m_menuService.Add(model);
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult DeleteLunch(int id)
+        {
+            var lunch = m_menuService.Menus.FirstOrDefault(x => x.Id == id);
+            if (lunch != null)
+            {
+                m_menuService.Menus.Remove(lunch);
+            }
+            return RedirectToAction("Index");
+        }
+
+        //public IActionResult Create(MenuDay model)
+        //{
+        //    var role = HttpContext.Session.GetString("Role");
+        //    if (role != "Admin")
+        //    {
+        //        return RedirectToAction("Login", "Auth");
+        //    }
+        //}
 
         public IActionResult Index()
         {

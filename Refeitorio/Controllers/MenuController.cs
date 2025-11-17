@@ -24,13 +24,13 @@ namespace Refeitorio.Controllers
 
             // construir intervalo de datas por semana para exibição (ex: 10/11/2025 - 14/11/2025)
             var weekRanges = new Dictionary<int, string>();
-            foreach (var w in allWeeks)
-            {
-                var minDate = w.MenuDays.Min(d => d.Date);
-                var start = minDate.Date;
-                var end = start.AddDays(4);
-                weekRanges[w.WeekNumber] = $"{start:dd/MM/yyyy} - {end:dd/MM/yyyy}";
-            }
+            //foreach (var w in allWeeks)
+            //{
+            //    var minDate = w.MenuDays.Min(d => d.Date);
+            //    var start = minDate.Date;
+            //    var end = start.AddDays(4);
+            //    weekRanges[w.WeekNumber] = $"{start:dd/MM/yyyy} - {end:dd/MM/yyyy}";
+            //}
 
             // tratar "All"
             var showAll = string.Equals(option, "All", StringComparison.OrdinalIgnoreCase);
@@ -91,17 +91,17 @@ namespace Refeitorio.Controllers
             }
 
             // Verificação: já existe marcação para ESTE dia (mesma data) — impedimos marcar Normal+Vegetariano no mesmo dia
-            var existingBookingDates = bookings
-                .Select(b => allWeeks.FirstOrDefault(w => w.WeekNumber == b.WeekNumber)?
-                                 .MenuDays.FirstOrDefault(d => d.Id == b.DayId)?.Date)
-                .Where(d => d.HasValue)
-                .Select(d => d!.Value);
+            //var existingBookingDates = bookings
+            //    .Select(b => allWeeks.FirstOrDefault(w => w.WeekNumber == b.WeekNumber)?
+            //                     .MenuDays.FirstOrDefault(d => d.Id == b.DayId)?.Date)
+            //    .Where(d => d.HasValue)
+            //    .Select(d => d!.Value);
 
-            if (BookingRules.HasConflictByDate(menuDay.Date, existingBookingDates))
-            {
-                TempData["Message"] = "Já tem uma marcação para este dia. Não pode marcar outra opção no mesmo dia.";
-                return RedirectToAction("Index", new { option = returnOption ?? option.ToString(), week = weekNumber });
-            }
+            //if (BookingRules.HasConflictByDate(menuDay.Date, existingBookingDates))
+            //{
+            //    TempData["Message"] = "Já tem uma marcação para este dia. Não pode marcar outra opção no mesmo dia.";
+            //    return RedirectToAction("Index", new { option = returnOption ?? option.ToString(), week = weekNumber });
+            //}
 
             // simples verificação: já existe marcação para esse dayId/semana na sessão?
             if (bookings.Any(b => b.DayId == dayId && b.WeekNumber == weekNumber))
@@ -111,11 +111,11 @@ namespace Refeitorio.Controllers
             }
 
             // usar as regras de reserva (prazo)
-            if (!BookingRules.CanBook(menuDay.Date))
-            {
-                TempData["Message"] = "Não é possível marcar este almoço: prazo de marcação expirado.";
-                return RedirectToAction("Index", new { option = returnOption ?? option.ToString(), week = weekNumber });
-            }
+            //if (!BookingRules.CanBook(menuDay.Date))
+            //{
+            //    TempData["Message"] = "Não é possível marcar este almoço: prazo de marcação expirado.";
+            //    return RedirectToAction("Index", new { option = returnOption ?? option.ToString(), week = weekNumber });
+            //}
 
             bookings.Add(new Booking { DayId = dayId, WeekNumber = weekNumber, Option = option });
             HttpContext.Session.SetObject(SessionBookingsKey, bookings);
