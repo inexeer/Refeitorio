@@ -1,4 +1,7 @@
 ﻿@inject Refeitorio.Services.UserService userService
+@inject Refeitorio.Services.AdminMenuService menuService
+@using System.Text.Json
+
 @{
     // tentar obter dados do controlador (fornecidos por HomeController)
     // var userName = ViewBag.UserName as string;
@@ -92,6 +95,9 @@
             </main>
         </div>
         <script src="~/js/adminNavbar.js" asp-append-version="true"></script>
+        <script>
+            window.savedLunches = @Html.Raw(JsonSerializer.Serialize(menuService.LunchByDate));
+        </script>
         <script src="~/js/adminCreateMenus.js" asp-append-version="true"></script>
     </body>
 </html>

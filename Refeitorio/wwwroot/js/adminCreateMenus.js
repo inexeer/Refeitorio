@@ -88,6 +88,8 @@ let currentDate = new Date(); // Tracks the visible month
 function renderCalendar() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
+    // At the top of renderCalendar()
+    const savedLunches = window.savedLunches || {};
 
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
@@ -128,30 +130,64 @@ function renderCalendar() {
                 (isFuture && !isToday)          // Any future weekday
             );
 
+        let lunchInfo = "";
+        const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+        if (savedLunches[dateKey]) {
+            const menu = savedLunches[dateKey];
+            const type = menu.option === "Vegetariano" ? "Veg" : "Normal";
+            lunchInfo = `
+                <div class="text-center small">
+                    <div class="fw-bold text-success">${type}: ${menu.mainDish}</div>
+                    <small class="text-muted">${menu.soup}</small>
+                </div>`;
+        }
+
         html += `
-            <div class="col-1 border p-2 text-center dayCell d-flex flex-column align-items-center"
-                 data-day="${day}">
-                 
+            <div class="col-1 border p-2 text-center dayCell d-flex flex-column align-items-center" data-day="${day}">
                 <div class="fw-bold">${day}</div>
                 <div class="small text-muted">${weekdays[weekdayIndex]}</div>
-
-                ${canBook
-                ? `<button class="btn btn-sm btn-primary mt-2 select-lunch" data-day="${day}">
-                        Marcar Almoço
-                       </button>`
-                : (isWeekday ? `<small class="text-danger mt-2">Indisponível</small>` : "")
-            }
+        
+                ${savedLunches[dateKey] ? lunchInfo : (
+                        canBook
+                            ? `<button class="btn btn-sm btn-primary mt-2 select-lunch" data-day="${day}">Selecinar menu</button>`
+                            : (isWeekday ? `<small class="text-danger mt-2">Indisponível</small>` : "")
+                    )}
             </div>
         `;
+
+        //html += `
+        //    <div class="col-1 border p-2 text-center dayCell d-flex flex-column align-items-center"
+        //         data-day="${day}">
+                 
+        //        <div class="fw-bold">${day}</div>
+        //        <div class="small text-muted">${weekdays[weekdayIndex]}</div>
+
+        //        ${canBook
+        //        ? `<button class="btn btn-sm btn-primary mt-2 select-lunch" data-day="${day}">
+        //                Marcar Almoço
+        //               </button>`
+        //        : (isWeekday ? `<small class="text-danger mt-2">Indisponível</small>` : "")
+        //    }
+        //    </div>
+        //`;
     }
 
     $("#calendarGrid").html(html);
 
     // Click select lunch button
     $(".select-lunch").off("click").on("click", function (e) {
+        e.preventDefault();
         e.stopPropagation();
         const day = $(this).data("day");
-        alert(`Select lunch for ${day}/${month + 1}/${year}`);
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth() + 1;
+
+        const dateString = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+        $.get("/Home/AdminSelectLunchByDate", { date: dateString }, function (data) {
+            $("#page-content").html(data);
+        });
     });
 }
 

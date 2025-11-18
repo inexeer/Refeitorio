@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
 using Refeitorio.Models;
 using Refeitorio.Services;
@@ -72,6 +73,9 @@ namespace Refeitorio.Controllers
         public IActionResult Create(MenuDay model)
         {
             if (ModelState.IsValid){
+                model.Id = m_menuService.GetAll().Any()
+            ? m_menuService.GetAll().Max(m => m.Id) + 1
+            : 1;
                 m_menuService.Add(model);
                 return RedirectToAction("Index");
             }
@@ -85,6 +89,52 @@ namespace Refeitorio.Controllers
             {
                 m_menuService.Menus.Remove(lunch);
             }
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult AdminSelectLunchByDate(string date)
+        {
+            var dt = DateOnly.Parse(date);
+            var allLunches = m_menuService.Menus;
+            var vm = new SelectLunchViewModel
+            {
+                Data = dt,
+                VegOptions = allLunches
+                    .Where(x => x.Option == MenuOption.Vegetariano)
+                    .Select(x => new SelectListItem(
+                        text: $"{x.MainDish} (Vegetariano)",
+                        value: x.Id.ToString()
+                    ))
+                    .ToList(),
+
+                NormalOptions = allLunches
+                    .Where(x => x.Option == MenuOption.Normal)
+                    .Select(x => new SelectListItem(
+                        text: $"{x.MainDish} (Normal)",
+                        value: x.Id.ToString()
+                    ))
+                    .ToList()
+            };
+            return PartialView("_AdminSelectLunchByDate", vm);
+        }
+
+        [HttpPost]
+        public IActionResult AssociateMenu(SelectLunchViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var chosenId = model.SelectedVegetarianId ?? model.SelectedNormalId ?? 0;
+            var isVeg = model.SelectedVegetarianId.HasValue;
+            m_menuService.LunchByDate[model.Data] = new MenuDay
+            {
+                Id = chosenId,
+                Option = isVeg ? MenuOption.Vegetariano : MenuOption.Normal
+            };
+
             return RedirectToAction("Index");
         }
 

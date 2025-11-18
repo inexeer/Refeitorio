@@ -1,0 +1,44 @@
+﻿@model Refeitorio.ViewModels.SelectLunchViewModel
+
+<form asp-action="AssociateMenu" asp-controller="Home" method="post">
+    <input type="hidden" asp-for="Data" />
+
+    <div class="mb-3">
+        <label class="form-label fw-bold text-success">Opção Vegetariana</label>
+        <select asp-for="SelectedVegetarianId"
+                asp-items="@Model.VegOptions"
+                class="form-select lunch-select"
+                data-type="veg">
+            <option value="">-- Escolher Vegetariano --</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label fw-bold text-primary">Opção Normal</label>
+        <select asp-for="SelectedNormalId"
+                asp-items="@Model.NormalOptions"
+                class="form-select lunch-select"
+                data-type="normal">
+            <option value="">-- Escolher Normal --</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">Salvar Escolha</button>
+</form>
+
+<script>
+    $(document).on("change", ".lunch-select", function () {
+        const val = $(this).val();
+        if (val) {
+            $(".lunch-select").not(this).prop("disabled", true);
+        } else {
+            $(".lunch-select").not(this).prop("disabled", false);
+        }
+    });
+
+    // Initial disable if already selected
+    $(function () {
+        if ($("#SelectedVegetarianId").val()) $("#SelectedNormalId").prop("disabled", true);
+        if ($("#SelectedNormalId").val()) $("#SelectedVegetarianId").prop("disabled", true);
+    });
+</script>
