@@ -1,95 +1,18 @@
-﻿//let currentDate = new Date(); // Global variable to track current date
-
-//// Function to render the calendar
-//function renderCalendar() {
-//    const year = currentDate.getFullYear();
-//    const month = currentDate.getMonth();
-//    const firstDay = new Date(year, month, 1);
-//    const lastDay = new Date(year, month + 1, 0);
-//    const monthName = currentDate.toLocaleString('default', { month: 'long' });
-
-//    const weekdays = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabado']
-
-//    const lunchOptions = ['Lunch A', 'Lunch B', 'Lunch C'];
-
-//    $("#calendarTitle").text(`${monthName} ${year}`);
-//    let html = "";
-
-//    // Blank cells until first weekday
-//    for (let i = 0; i < firstDay.getDay(); i++) {
-//        html += `<div class="col-1 border p-2 text-muted">${weekdays[i]}</div>`;
-//    }
-
-//    // Days of the month
-//    const now = new Date();
-//    const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-//    // Loop through all days of the month
-//    for (let day = 1; day <= lastDay.getDate(); day++) {
-//        const weekdayIndex = (firstDay.getDay() + day - 1) % 7;
-//        const isWeekday = weekdayIndex >= 1 && weekdayIndex <= 5; // Mon–Fri
-
-//        // Date of this cell
-//        const cellDate = new Date(year, month, day);
-//        const cellMidnight = new Date(year, month, day);
-//        cellMidnight.setHours(0, 0, 0, 0);
-
-//        // NEW: Conditions to show the button
-//        const isPast = cellMidnight < todayMidnight;                                    // Already passed
-//        const isToday = cellMidnight.getTime() === todayMidnight.getTime();
-//        const isBefore10AM = isToday && now.getHours() < 10;
-
-//        const canBook = isWeekday && !isPast && (isToday ? isBefore10AM : true);
-//        // → Button only appears on weekdays that are today (before 10:00) or in the future
-
-//        html += `
-//            <div class="col-1 border p-2 text-center dayCell d-flex flex-column align-items-center position-relative" data-day="${day}">
-//                <div class="fw-bold">${day}</div>
-//                <div class="small text-muted">${weekdays[weekdayIndex]}</div>
-//                ${canBook
-//                ? `<button class="btn btn-sm btn-primary mt-2 select-lunch" data-day="${day}">Marcar Almoço</button>`
-//                : (isWeekday
-//                    ? `<small class="text-danger mt-2">Indisponível</small>`
-//                    : '')
-//            }
-//            </div>
-//        `;
-//    }
-//    $("#calendarGrid").html(html);
-
-//    // Add click event to each day cell
-//    $(".dayCell").off("click").on("click", function () {
-//        const selectedDay = $(this).data("day");
-//        alert("Selected: " + selectedDay + "/" + (month + 1) + "/" + year);
-//    });
-
-//    // Add click event for lunch selection buttons
-//    $(".select-lunch").off("click").on("click", function (e) {
-//        e.stopPropagation(); // Prevent triggering dayCell click
-//        const day = $(this).data("day");
-//        // Placeholder action: show available lunches (replace with modal/form later)
-//        alert("Select lunch for " + day + "/" + (month + 1) + "/" + year + ": " + lunchOptions.join(", "));
-//    });
-//}
-
-//// Event delegation for navigation buttons
-//$(document).on("click", "#prevMonth", function () {
-//    currentDate.setMonth(currentDate.getMonth() - 1);
-//    renderCalendar();
-//});
-
-//$(document).on("click", "#nextMonth", function () {
-//    currentDate.setMonth(currentDate.getMonth() + 1);
-//    renderCalendar();
-//});
-
-let currentDate = new Date(); // Tracks the visible month
+﻿let currentDate = new Date(); // Tracks the visible month
+let savedLunches = {};
+$(document).ready(function () {
+    $.get("/Home/GetSavedLunches", function (data) {
+        savedLunches = data;
+        renderCalendar();
+    }).fail(function () {
+        console.error("Erro ao ler o json");
+        renderCalendar();
+    });
+});
 
 function renderCalendar() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
-    // At the top of renderCalendar()
-    const savedLunches = window.savedLunches || {};
 
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
@@ -155,22 +78,6 @@ function renderCalendar() {
                     )}
             </div>
         `;
-
-        //html += `
-        //    <div class="col-1 border p-2 text-center dayCell d-flex flex-column align-items-center"
-        //         data-day="${day}">
-                 
-        //        <div class="fw-bold">${day}</div>
-        //        <div class="small text-muted">${weekdays[weekdayIndex]}</div>
-
-        //        ${canBook
-        //        ? `<button class="btn btn-sm btn-primary mt-2 select-lunch" data-day="${day}">
-        //                Marcar Almoço
-        //               </button>`
-        //        : (isWeekday ? `<small class="text-danger mt-2">Indisponível</small>` : "")
-        //    }
-        //    </div>
-        //`;
     }
 
     $("#calendarGrid").html(html);

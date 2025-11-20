@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Refeitorio.Models;
 using Refeitorio.Services;
 using Refeitorio.ViewModels;
+using System.Text.Json;
+using System.IO;
 
 namespace Refeitorio.Controllers
 {
@@ -128,14 +130,35 @@ namespace Refeitorio.Controllers
             }
 
             var chosenId = model.SelectedVegetarianId ?? model.SelectedNormalId ?? 0;
-            var isVeg = model.SelectedVegetarianId.HasValue;
-            m_menuService.LunchByDate[model.Data] = new MenuDay
+            var chosenMenu = m_menuService.GetAll().FirstOrDefault(m => m.Id == chosenId);
+            if (chosenMenu == null)
             {
-                Id = chosenId,
-                Option = isVeg ? MenuOption.Vegetariano : MenuOption.Normal
-            };
+                TempData["Error"] = "Menu não encontrado.";
+                return RedirectToAction("Index");
+            }
+
+            m_menuService.SaveLunch(chosenMenu, model.Data);
+
+            m_menuService.SerializarDict();
 
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult GetSavedLunches()
+        {
+            var data = m_menuService.LunchByDate
+                .ToDictionary(
+                    k => k.Key.ToString("yyyy-MM-dd"),
+                    v => new
+                    {
+                        mainDish = v.Value.MainDish ?? "",
+                        soup = v.Value.Soup ?? "",
+                        dessert = v.Value.Dessert ?? "",
+                        option = v.Value.Option.ToString()
+                    });
+
+            return Content(JsonSerializer.Serialize(data), "application/json");
         }
 
         //public IActionResult Create(MenuDay model)

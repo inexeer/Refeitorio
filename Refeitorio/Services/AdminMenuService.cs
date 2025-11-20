@@ -1,4 +1,5 @@
 ﻿using Refeitorio.Models;
+using System.Text.Json;
 
 namespace Refeitorio.Services
 {
@@ -17,6 +18,30 @@ namespace Refeitorio.Services
         public void SaveLunch(MenuDay menuDay, DateOnly data)
         {
             LunchByDate[data] = menuDay;
+        }
+
+        public void SerializarDict()
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Data", "MenuData.json");
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+
+            var dataForJson = LunchByDate.ToDictionary(
+                k => k.Key.ToString("yyyy-MM-dd"),
+                v => new
+                {
+                    v.Value.Id,
+                    v.Value.MainDish,
+                    v.Value.Soup,
+                    v.Value.Dessert,
+                    Option = v.Value.Option.ToString()
+                });
+
+            string json = JsonSerializer.Serialize(dataForJson, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
+
+            File.WriteAllText(path, json);
         }
     }
 }
