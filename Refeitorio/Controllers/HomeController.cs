@@ -7,6 +7,7 @@ using Refeitorio.Services;
 using Refeitorio.ViewModels;
 using System.Text.Json;
 using System.IO;
+using System.Reflection;
 
 namespace Refeitorio.Controllers
 {
@@ -14,10 +15,12 @@ namespace Refeitorio.Controllers
     {
         private readonly UserService m_userService;
         private readonly AdminMenuService m_menuService;
-        public HomeController(UserService userService, AdminMenuService menuService)
+        private readonly FuncProductService m_productService;
+        public HomeController(UserService userService, AdminMenuService menuService, FuncProductService productService)
         {
             m_userService = userService;
             m_menuService = menuService;
+            m_productService = productService;
         }
 
         public IActionResult AdminPendingUsers()
@@ -133,7 +136,7 @@ namespace Refeitorio.Controllers
             var chosenMenu = m_menuService.GetAll().FirstOrDefault(m => m.Id == chosenId);
             if (chosenMenu == null)
             {
-                TempData["Error"] = "Menu não encontrado.";
+                TempData["Error"] = "Menu nao encontrado.";
                 return RedirectToAction("Index");
             }
 
@@ -161,17 +164,29 @@ namespace Refeitorio.Controllers
             return Content(JsonSerializer.Serialize(data), "application/json");
         }
 
-        //public IActionResult Create(MenuDay model)
-        //{
-        //    var role = HttpContext.Session.GetString("Role");
-        //    if (role != "Admin")
-        //    {
-        //        return RedirectToAction("Login", "Auth");
-        //    }
-        //}
+        [HttpPost]
+        public IActionResult CreateProduct(Product model)
+        {
+            // ADD MODEL'S CATEGORY SOMEWHERE AS WELL
+            if (ModelState.IsValid)
+            {
+                model.Id = m_productService.GetAll().Any()
+            ? m_productService.GetAll().Max(m => m.Id) + 1
+            : 1;
+                m_productService.AddProduct(model);
+                m_productService.SerializeProducts();
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
+        }
+
+
+
+
 
         public IActionResult Index()
         {
+            // INDEPENDETLY FROM THE ROLE DESERIALIZE PRODUCTS.JSON INTO THE LIST IN FUNCPRODUCTSERVICE
             var role = HttpContext.Session.GetString("Role");
             if (string.IsNullOrEmpty(role) || (role != "Admin" && role != "Staff" && role != "Student"))
             {
@@ -194,16 +209,12 @@ namespace Refeitorio.Controllers
                 }
             }
 
-            //if (role == "Admin")
-            //{
-            //    var vm = new AdminPendingUsersViewModel
-            //    {
-            //        PendingUsers = m_userService.GetPendingUsers()
-            //    };
-            //    return View(vm);
-            //}
+            var vm = new FuncHomeViewModel
+            {
+                // FALTAM COISAS AQUI
+            };
 
-            return View(new AdminPendingUsersViewModel());
+            return View(vm);
         }
 
         [HttpPost]

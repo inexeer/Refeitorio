@@ -1,4 +1,4 @@
-﻿@model Refeitorio.ViewModels.AdminPendingUsersViewModel
+﻿@model Refeitorio.ViewModels.FuncHomeViewModel
 
 @{
     ViewData["Title"] = "Home Page";
@@ -13,6 +13,10 @@
     {
         <h2>Dashboard</h2>
         <p>Bem vindo, @role!</p>
+    }
+    else if (role == "Staff")
+    {
+        <partial name="_FuncHome" />
     }
     else
     {
