@@ -25,9 +25,18 @@
                     <tr>
                         <td>@p.Id</td>
                         <td>@p.Name</td>
-                        <td>@(p.Category?.Name ?? $"Categoria {p.CategoryId}")</td>
+                        <td>@(p.Category)</td>
                         <td>@String.Format("{0:0.00} €", p.Price)</td>
                         <td>@p.Stock</td>
+                        <td>
+                            <form asp-controller="Home" asp-action="DeleteProduct" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@p.Id" />
+                                <button type="submit" class="btn btn-success btn-sm">Apagar</button>
+                            </form>
+                        </td>
+                        <td>
+                            <button type="button" data-id="@p.Id" class="btn btn-warning btn-sm edit-product-btn">Editar</button>
+                        </td>
                     </tr>
                 }
             </tbody>

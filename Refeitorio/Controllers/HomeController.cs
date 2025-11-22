@@ -8,6 +8,7 @@ using Refeitorio.ViewModels;
 using System.Text.Json;
 using System.IO;
 using System.Reflection;
+using System;
 
 namespace Refeitorio.Controllers
 {
@@ -164,17 +165,60 @@ namespace Refeitorio.Controllers
             return Content(JsonSerializer.Serialize(data), "application/json");
         }
 
+        [HttpGet]
+        public IActionResult FuncCreateProduct()
+        {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Staff")
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+            return PartialView("_FuncCreateProduct");
+        }
+
         [HttpPost]
         public IActionResult CreateProduct(Product model)
         {
-            // ADD MODEL'S CATEGORY SOMEWHERE AS WELL
             if (ModelState.IsValid)
             {
                 model.Id = m_productService.GetAll().Any()
             ? m_productService.GetAll().Max(m => m.Id) + 1
             : 1;
                 m_productService.AddProduct(model);
-                m_productService.SerializeProducts();
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult DeleteProduct(int id)
+        {
+            var product = m_productService.GetAll().FirstOrDefault(x => x.Id == id);
+            if (product != null)
+            {
+                m_productService.DeleteProduct(product);
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult FuncEditProduct(int id)
+        {
+            if (HttpContext.Session.GetString("Role") != "Staff")
+                return RedirectToAction("Login", "Auth");
+
+            var product = m_productService.GetById(id);
+            if (product == null) return NotFound();
+
+            return PartialView("_FuncEditProduct", product);
+        }
+
+        [HttpPost]
+        public IActionResult EditProduct(Product updatedProduct)
+        {
+            if (ModelState.IsValid)
+            {
+                m_productService.UpdateProduct(updatedProduct);
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Index");
@@ -186,7 +230,7 @@ namespace Refeitorio.Controllers
 
         public IActionResult Index()
         {
-            // INDEPENDETLY FROM THE ROLE DESERIALIZE PRODUCTS.JSON INTO THE LIST IN FUNCPRODUCTSERVICE
+            //m_productService.LoadProductsFromFile();
             var role = HttpContext.Session.GetString("Role");
             if (string.IsNullOrEmpty(role) || (role != "Admin" && role != "Staff" && role != "Student"))
             {
@@ -211,7 +255,7 @@ namespace Refeitorio.Controllers
 
             var vm = new FuncHomeViewModel
             {
-                // FALTAM COISAS AQUI
+                Products = m_productService.GetAll()
             };
 
             return View(vm);

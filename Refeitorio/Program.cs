@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<AdminMenuService>();
+builder.Services.AddSingleton<FuncProductService>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers();
 builder.Services.AddDistributedMemoryCache();

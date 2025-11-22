@@ -1,0 +1,44 @@
+[
+  {
+    "Id": 1,
+    "CategoryId": 0,
+    "Category": "Sandes",
+    "Name": "fasfas",
+    "Description": "***",
+    "Price": 2.50,
+    "Kcal": 100,
+    "Protein": 100,
+    "Fat": 100,
+    "Carbs": 100,
+    "Allergens": "Lactose",
+    "Stock": 3
+  },
+  {
+    "Id": 2,
+    "CategoryId": 0,
+    "Category": "Sandes",
+    "Name": "caraca",
+    "Description": "abc",
+    "Price": 2.10,
+    "Kcal": 200,
+    "Protein": 250,
+    "Fat": 100,
+    "Carbs": 100,
+    "Allergens": "Lactose",
+    "Stock": 3
+  },
+  {
+    "Id": 3,
+    "CategoryId": 0,
+    "Category": "fasfasfas",
+    "Name": "OPAA",
+    "Description": "fasfas",
+    "Price": 31231,
+    "Kcal": 123,
+    "Protein": 123,
+    "Fat": 123,
+    "Carbs": 123,
+    "Allergens": "Lactose",
+    "Stock": 2
+  }
+]
