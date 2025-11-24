@@ -149,6 +149,13 @@ $(document).on("click", "#VerMenuBtn", function (e) {
     });
 });
 
+$(document).on("click", "#SaldoBtn", function (e) {
+    e.preventDefault();
+    $.get("/Home/StudentSaldo", function (data) {
+        $("#page-content").html(data);
+    });
+});
+
 $(document).on("click", "#VerHistoricoBtn", function (e) {
     e.preventDefault();
 
@@ -222,6 +229,9 @@ $(document).on("click", ".comprar-btn", function () {
             if (res.success) {
                 alert(res.message);
 
+                $("#currentSaldo").text(res.newSaldo.toFixed(2) + " €");
+                $("#navbarSaldo").text(res.newSaldo.toFixed(2) + " €");
+
                 if (res.newStock !== undefined) {
                     const cardBody = btn.closest(".card-body");
 
@@ -262,3 +272,37 @@ $(document).on("click", ".comprar-btn", function () {
         });
 });
 
+$(document).on("submit", "#topupForm", function (e) {
+    e.preventDefault();
+
+    const amount = parseFloat($("#topupAmount").val()) || 0;
+    if (amount < 1) {
+        $("#topupMessage").html('<div class="alert alert-danger">Valor mínimo: 1.00 €</div>');
+        return;
+    }
+
+    const $btn = $(this).find("button[type=submit]");
+    $btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm"></span> A carregar...');
+
+    $.post("/Home/TopUpSaldo", { amount: amount })
+        .done(function (res) {
+            if (res.success) {
+                $("#currentSaldo").text(res.newSaldo.toFixed(2) + " €");
+                $("#navbarSaldo").text(res.newSaldo.toFixed(2) + " €");
+                $("#topupMessage").html(
+                    `<div class="alert alert-success">
+                        <strong>Sucesso!</strong> +${amount.toFixed(2)} € adicionados!
+                     </div>`
+                );
+                setTimeout(() => $("#topupMessage").empty(), 4000);
+            } else {
+                $("#topupMessage").html(`<div class="alert alert-danger">${res.message}</div>`);
+            }
+        })
+        .fail(function () {
+            $("#topupMessage").html('<div class="alert alert-danger">Erro de ligação.</div>');
+        })
+        .always(function () {
+            $btn.prop("disabled", false).html('Carregar');
+        });
+});

@@ -90,6 +90,11 @@
                         <div>
                             <a class="nav-item" href="#" id="VerHistoricoBarBtn">Histórico do bar</a>
                         </div>
+                    <div>
+                        <a class="nav-item" href="#" id="SaldoBtn">
+                            Saldo: <span id="navbarSaldo">@String.Format("{0:0.00} €", userService.GetUserByEmail(sessionEmail).Saldo)</span>
+                        </a>
+                    </div>
                     }
 
                     <div class="d-flex align-items-center gap-2">

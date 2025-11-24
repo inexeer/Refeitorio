@@ -25,6 +25,18 @@ namespace Refeitorio.Services
             File.WriteAllText(FilePath, JsonSerializer.Serialize(m_users, new JsonSerializerOptions { WriteIndented = true }));
         }
 
+        public void AddSaldo(string email, decimal amount)
+        {
+            var index = m_users.IndexOf(m_users.FirstOrDefault(u =>
+                u.Email.Equals(email, StringComparison.OrdinalIgnoreCase)));
+
+            if (index != -1)
+            {
+                m_users[index].Saldo += amount;
+                Save();
+            }
+        }
+
         public string HashPassword(string password)
         {
             using var sha = SHA256.Create();

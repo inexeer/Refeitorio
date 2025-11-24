@@ -48,5 +48,55 @@
     "Total": 31231,
     "UserEmail": "i230064@inete.net",
     "PurchasedAt": "2025-11-24T00:57:12.015424+00:00"
+  },
+  {
+    "Id": 6,
+    "ProductId": 5,
+    "ProductName": "test",
+    "Price": 12,
+    "Quantity": 1,
+    "Total": 12,
+    "UserEmail": "aluno@inete.net",
+    "PurchasedAt": "2025-11-24T15:13:08.231356+00:00"
+  },
+  {
+    "Id": 7,
+    "ProductId": 5,
+    "ProductName": "test",
+    "Price": 12,
+    "Quantity": 1,
+    "Total": 12,
+    "UserEmail": "aluno@inete.net",
+    "PurchasedAt": "2025-11-24T15:14:40.7182225+00:00"
+  },
+  {
+    "Id": 8,
+    "ProductId": 5,
+    "ProductName": "test",
+    "Price": 12,
+    "Quantity": 1,
+    "Total": 12,
+    "UserEmail": "aluno@inete.net",
+    "PurchasedAt": "2025-11-24T15:14:50.9855698+00:00"
+  },
+  {
+    "Id": 9,
+    "ProductId": 5,
+    "ProductName": "test",
+    "Price": 12,
+    "Quantity": 1,
+    "Total": 12,
+    "UserEmail": "aluno@inete.net",
+    "PurchasedAt": "2025-11-24T15:15:50.9338162+00:00"
+  },
+  {
+    "Id": 10,
+    "ProductId": 5,
+    "ProductName": "test",
+    "Price": 12,
+    "Quantity": 1,
+    "Total": 12,
+    "UserEmail": "aluno@inete.net",
+    "PurchasedAt": "2025-11-24T15:15:57.9039088+00:00"
   }
 ]

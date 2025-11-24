@@ -324,6 +324,7 @@ namespace Refeitorio.Controllers
         public IActionResult BuyProduct(int productId, int quantity = 1)
         {
             var userEmail = HttpContext.Session.GetString("User");
+            var user = m_userService.GetUserByEmail(userEmail);
 
             var product = m_productService.GetById(productId);
             if (product == null)
@@ -331,6 +332,20 @@ namespace Refeitorio.Controllers
 
             if (!m_productService.TryDecrementStock(productId, quantity))
                 return Json(new { success = false, message = "Nao tem stock suficiente!" });
+
+            decimal totalPrice = product.Price * quantity;
+
+            if (user.Saldo < totalPrice)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = $"Saldo insuficiente! Faltam {(totalPrice - user.Saldo):0.00} €"
+                });
+            }
+
+            m_userService.AddSaldo(userEmail, -totalPrice);
+            var novoSaldo = user.Saldo;
 
             var order = new Order
             {
@@ -347,7 +362,8 @@ namespace Refeitorio.Controllers
             {
                 success = true,
                 message = $"Comprado {quantity} de {product.Name}!",
-                newStock = product.Stock
+                newStock = product.Stock,
+                newSaldo = novoSaldo
             });
         }
 
@@ -365,6 +381,40 @@ namespace Refeitorio.Controllers
                 Orders = m_orderService.GetByUser(userEmail)
             };
             return PartialView("_StudentPurchaseHistory", vm);
+        }
+
+        public IActionResult StudentSaldo()
+        {
+            var role = HttpContext.Session.GetString("Role");
+            var userEmail = HttpContext.Session.GetString("User");
+            if (role != "Student")
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            var vm = new SaldoViewModel{
+                Saldo = m_userService.GetUserByEmail(userEmail).Saldo,
+                UserEmail = userEmail
+            };
+            return PartialView("_StudentSaldo", vm);
+        }
+
+        [HttpPost]
+        public IActionResult TopUpSaldo(decimal amount)
+        {
+            var email = HttpContext.Session.GetString("User");
+
+            if (string.IsNullOrEmpty(email) || amount < 1m)
+                return Json(new { success = false, message = "Valor inválido" });
+
+            var user = m_userService.GetUserByEmail(email);
+            if (user == null)
+                return Json(new { success = false, message = "Utilizador não encontrado" });
+
+            //user.Saldo += amount;
+            m_userService.AddSaldo(email, amount);
+
+            return Json(new { success = true, newSaldo = user.Saldo });
         }
 
 

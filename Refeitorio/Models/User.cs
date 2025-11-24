@@ -21,7 +21,7 @@ namespace Refeitorio.Models
         public string PasswordHash { get; set; }
         public UserType Role { get; set; }
         public string Nif { get; set; }
-        public double Saldo { get; set; } = 0;
+        public decimal Saldo { get; set; } = 0;
 
         public bool IsApproved { get; set; } = false;
     }

@@ -54,5 +54,19 @@
     "Carbs": 12,
     "Allergens": "12",
     "Stock": 0
+  },
+  {
+    "Id": 5,
+    "CategoryId": 0,
+    "Category": "test",
+    "Name": "test",
+    "Description": "test",
+    "Price": 12,
+    "Kcal": 12,
+    "Protein": 12,
+    "Fat": 12,
+    "Carbs": 12,
+    "Allergens": "12",
+    "Stock": 7
   }
 ]
