@@ -82,6 +82,16 @@
                         </div>
                     }
 
+                    @if (role == "Student")
+                    {
+                        <div>
+                            <a class="nav-item" href="#" id="VerHistoricoBtn">Histórico de marcações</a>
+                        </div>
+                        <div>
+                            <a class="nav-item" href="#" id="VerHistoricoBarBtn">Histórico do bar</a>
+                        </div>
+                    }
+
                     <div class="d-flex align-items-center gap-2">
                         <div class="text-end me-3 d-none d-md-block">
                             <div style="font-weight:600;">@userName</div>
@@ -103,6 +113,7 @@
         </div>
         <script src="~/js/adminNavbar.js" asp-append-version="true"></script>
         <script src="~/js/funcNavbar.js" asp-append-version="true"></script>
+        <script src="~/js/student.js" asp-append-version="true"></script>
         @* <script>
             window.savedLunches = @Html.Raw(JsonSerializer.Serialize(menuService.TEST));
         </script> *@

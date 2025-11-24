@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Refeitorio.Services
 {
-    public static class BookingRules
+    public class BookingRules
     {
         public static bool CanBook(DateTime bookingDateTime)
         {

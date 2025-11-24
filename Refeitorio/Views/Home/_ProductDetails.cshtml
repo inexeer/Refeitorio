@@ -1,0 +1,78 @@
+﻿@model Refeitorio.Models.Product
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Card principal do produto -->
+            <div class="card shadow-lg border-0 rounded-3 overflow-hidden">
+                <div class="row g-0">
+                    <!-- Imagem (placeholder bonito) -->
+                    <div class="col-md-5 bg-light d-flex align-items-center justify-content-center">
+                        <div class="text-center p-5">
+                            <i class="bi bi-image display-1 text-muted"></i>
+                            <p class="text-muted mt-3">Sem imagem</p>
+                        </div>
+                    </div>
+
+                    <!-- Informações -->
+                    <div class="col-md-7">
+                        <div class="card-body p-5">
+                            <!-- Cabeçalho -->
+                            <div class="d-flex justify-content-between align-items-start mb-4">
+                                <div>
+                                    <h1 class="fw-bold text-primary">@Model.Name</h1>
+                                    <span class="badge bg-secondary fs-5 px-3 py-2">@Model.Category</span>
+                                </div>
+                            </div>
+
+                            <!-- Preço grande -->
+                            <div class="mb-4">
+                                <h2 class="text-success fw-bold">@String.Format("{0:0.00} €", Model.Price)</h2>
+                            </div>
+
+                            <!-- Descrição -->
+                            @if (!string.IsNullOrEmpty(Model.Description))
+                            {
+                                    <div class="bg-light rounded-3 p-4 mb-4">
+                                        <p class="text-muted fst-italic mb-0">"@Model.Description"</p>
+                                    </div>
+                            }
+
+                            <!-- Stock -->
+                            <div class="mb-4">
+                                <strong>Stock:</strong>
+                                <span class="@(Model.Stock > 0 ? "text-success" : "text-danger") fw-bold fs-5">
+                                    @(Model.Stock > 0 ? $"{Model.Stock} unidades disponíveis" : "Esgotado")
+                                </span>
+                            </div>
+
+                            <!-- Tabela nutricional -->
+                            <h4 class="fw-bold mb-3">Informação Nutricional (por 100g)</h4>
+                            <table class="table table-bordered bg-white">
+                                <tr><th>Energia</th><td>@Model.Kcal kcal</td></tr>
+                                <tr><th>Proteínas</th><td>@Model.Protein g</td></tr>
+                                <tr><th>Gorduras</th><td>@Model.Fat g</td></tr>
+                                <tr><th>Hidratos de Carbono</th><td>@Model.Carbs g</td></tr>
+                            </table>
+
+                            <!-- Alergénios -->
+                            @if (!string.IsNullOrEmpty(Model.Allergens))
+                            {
+                                    <div class="alert alert-warning mt-4">
+                                        <strong>Alergénios:</strong> @Model.Allergens
+                                    </div>
+                            }
+
+                            <!-- Botão voltar (extra) -->
+                            <div class="mt-5">
+                                <a id="VerBarBtn" class="btn btn-lg btn-primary">
+                                    ← Voltar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

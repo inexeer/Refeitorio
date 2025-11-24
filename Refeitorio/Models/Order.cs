@@ -1,14 +1,16 @@
 ﻿using Refeitorio.Models;
 
-public class Order
+namespace Refeitorio.Models
 {
-    public int Id { get; set; }
-    public string UserId { get; set; }
-    public User User { get; set; }
-
-    public decimal Total { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public string Status { get; set; }
-
-    public ICollection<OrderItem> Items { get; set; }
+    public class Order
+    {
+        public int Id { get; set; }
+        public int ProductId { get; set; }
+        public string ProductName { get; set; } = "";
+        public decimal Price { get; set; }
+        public int Quantity { get; set; }
+        public decimal Total => Price * Quantity;
+        public string UserEmail { get; set; } = ""; // from session
+        public DateTime PurchasedAt { get; set; } = DateTime.Now;
+    }
 }

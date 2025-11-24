@@ -11,13 +11,13 @@
     "Fat": 100,
     "Carbs": 100,
     "Allergens": "Lactose",
-    "Stock": 3
+    "Stock": 0
   },
   {
     "Id": 2,
     "CategoryId": 0,
     "Category": "Sandes",
-    "Name": "caraca",
+    "Name": "aaaaaaa",
     "Description": "abc",
     "Price": 2.10,
     "Kcal": 200,
@@ -25,7 +25,7 @@
     "Fat": 100,
     "Carbs": 100,
     "Allergens": "Lactose",
-    "Stock": 3
+    "Stock": 0
   },
   {
     "Id": 3,
@@ -39,6 +39,20 @@
     "Fat": 123,
     "Carbs": 123,
     "Allergens": "Lactose",
-    "Stock": 2
+    "Stock": 0
+  },
+  {
+    "Id": 4,
+    "CategoryId": 0,
+    "Category": "Sandes",
+    "Name": "a",
+    "Description": "a",
+    "Price": 12,
+    "Kcal": 12,
+    "Protein": 12,
+    "Fat": 12,
+    "Carbs": 12,
+    "Allergens": "12",
+    "Stock": 0
   }
 ]

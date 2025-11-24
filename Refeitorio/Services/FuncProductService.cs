@@ -89,5 +89,16 @@ namespace Refeitorio.Services
                 m_products = new List<Product>();
             }
         }
+
+        public bool TryDecrementStock(int productId, int quantity)
+        {
+            var product = m_products.FirstOrDefault(p => p.Id == productId);
+            if (product == null || product.Stock < quantity)
+                return false;
+
+            product.Stock -= quantity;
+            SerializeProducts();
+            return true;
+        }
     }
 }

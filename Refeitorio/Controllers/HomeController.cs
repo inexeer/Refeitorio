@@ -17,11 +17,15 @@ namespace Refeitorio.Controllers
         private readonly UserService m_userService;
         private readonly AdminMenuService m_menuService;
         private readonly FuncProductService m_productService;
-        public HomeController(UserService userService, AdminMenuService menuService, FuncProductService productService)
+        private readonly BookingService m_bookingService;
+        private readonly OrderService m_orderService;
+        public HomeController(UserService userService, AdminMenuService menuService, FuncProductService productService, BookingService bookingService, OrderService orderService)
         {
             m_userService = userService;
             m_menuService = menuService;
             m_productService = productService;
+            m_bookingService = bookingService;
+            m_orderService = orderService;
         }
 
         public IActionResult AdminPendingUsers()
@@ -94,6 +98,7 @@ namespace Refeitorio.Controllers
             if (lunch != null)
             {
                 m_menuService.Menus.Remove(lunch);
+                m_menuService.SaveMenus();
             }
             return RedirectToAction("Index");
         }
@@ -222,6 +227,144 @@ namespace Refeitorio.Controllers
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Index");
+        }
+
+        public IActionResult StudentMenuCalendar()
+        {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Student")
+                return RedirectToAction("Login", "Auth");
+
+            return PartialView("_StudentMenuCalendar");
+        }
+
+        [HttpPost]
+        public IActionResult BookLunch(string date)
+        {
+            var email = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(email))
+                return Json(new { success = false, message = "Nao autenticado" });
+
+            var menu = m_menuService.LunchByDate
+                .FirstOrDefault(x => x.Key.ToString("yyyy-MM-dd") == date).Value;
+
+            if (menu == null)
+                return Json(new { success = false, message = "Sem menu nesse dia" });
+
+            m_bookingService.BookLunch(email, date, menu.Option.ToString());
+
+            return Json(new { success = true });
+        }
+
+        [HttpGet]
+        public IActionResult GetMyBookings()
+        {
+            var email = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(email)) return Json(new { });
+
+            var bookings = m_bookingService.Bookings
+                .Where(b => b.UserEmail == email)
+                .ToDictionary(b => b.Date, b => b.Option);
+
+            return Json(bookings);
+        }
+
+        public IActionResult StudentBookingHistory()
+        {
+            var role = HttpContext.Session.GetString("Role");
+            var userEmail = HttpContext.Session.GetString("User");
+            if (role != "Student")
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            var vm = new StudentHistoryViewModel
+            {
+                Bookings = m_bookingService.GetByUser(userEmail)
+            };
+            return PartialView("_StudentHistorico", vm);
+        }
+
+        [HttpPost]
+        public IActionResult CancelBooking(int id)
+        {
+            var booking = m_bookingService.Bookings.FirstOrDefault(x => x.Id == id);
+            if (booking != null)
+            {
+                m_bookingService.DeleteBooking(booking);
+            }
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult StudentShowBar()
+        {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Student")
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            var vm = new StudentBarViewModel
+            {
+                Products = m_productService.GetAllProducts()
+            };
+            return PartialView("_StudentBar", vm);
+        }
+
+        [HttpGet]
+        public IActionResult GetProductDetails(int id)
+        {
+            var product = m_productService.GetAllProducts().FirstOrDefault(p => p.Id == id);
+            if (product == null) return NotFound();
+
+            return PartialView("_ProductDetails", product);
+        }
+
+        [HttpPost]
+        public IActionResult BuyProduct(int productId, int quantity = 1)
+        {
+            var userEmail = HttpContext.Session.GetString("User");
+
+            var product = m_productService.GetById(productId);
+            if (product == null)
+                return Json(new { success = false, message = "Produto nao encontrado." });
+
+            if (!m_productService.TryDecrementStock(productId, quantity))
+                return Json(new { success = false, message = "Nao tem stock suficiente!" });
+
+            var order = new Order
+            {
+                ProductId = product.Id,
+                ProductName = product.Name,
+                Price = product.Price,
+                Quantity = quantity,
+                UserEmail = userEmail
+            };
+
+            m_orderService.AddPurchase(order);
+
+            return Json(new
+            {
+                success = true,
+                message = $"Comprado {quantity} de {product.Name}!",
+                newStock = product.Stock
+            });
+        }
+
+        public IActionResult StudentBarHistory()
+        {
+            var role = HttpContext.Session.GetString("Role");
+            var userEmail = HttpContext.Session.GetString("User");
+            if (role != "Student")
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            var vm = new StudentBarHistoryViewModel
+            {
+                Orders = m_orderService.GetByUser(userEmail)
+            };
+            return PartialView("_StudentPurchaseHistory", vm);
         }
 
 

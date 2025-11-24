@@ -1,0 +1,52 @@
+[
+  {
+    "Id": 1,
+    "ProductId": 1,
+    "ProductName": "fasfas",
+    "Price": 2.50,
+    "Quantity": 1,
+    "Total": 2.50,
+    "UserEmail": "i230064@inete.net",
+    "PurchasedAt": "2025-11-23T23:55:04.7663767+00:00"
+  },
+  {
+    "Id": 2,
+    "ProductId": 1,
+    "ProductName": "fasfas",
+    "Price": 2.50,
+    "Quantity": 2,
+    "Total": 5.00,
+    "UserEmail": "i230064@inete.net",
+    "PurchasedAt": "2025-11-23T23:56:16.1848242+00:00"
+  },
+  {
+    "Id": 3,
+    "ProductId": 2,
+    "ProductName": "caraca",
+    "Price": 2.10,
+    "Quantity": 3,
+    "Total": 6.30,
+    "UserEmail": "i230064@inete.net",
+    "PurchasedAt": "2025-11-24T00:07:09.0788466+00:00"
+  },
+  {
+    "Id": 4,
+    "ProductId": 3,
+    "ProductName": "OPAA",
+    "Price": 31231,
+    "Quantity": 1,
+    "Total": 31231,
+    "UserEmail": "i230064@inete.net",
+    "PurchasedAt": "2025-11-24T00:24:39.2778837+00:00"
+  },
+  {
+    "Id": 5,
+    "ProductId": 3,
+    "ProductName": "OPAA",
+    "Price": 31231,
+    "Quantity": 1,
+    "Total": 31231,
+    "UserEmail": "i230064@inete.net",
+    "PurchasedAt": "2025-11-24T00:57:12.015424+00:00"
+  }
+]

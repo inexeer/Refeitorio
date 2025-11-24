@@ -1,0 +1,16 @@
+[
+  {
+    "Id": 1,
+    "Option": 0,
+    "MainDish": "a",
+    "Soup": "a",
+    "Dessert": "a"
+  },
+  {
+    "Id": 2,
+    "Option": 1,
+    "MainDish": "b",
+    "Soup": "b",
+    "Dessert": "b"
+  }
+]

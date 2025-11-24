@@ -1,0 +1,34 @@
+﻿@model Refeitorio.ViewModels.StudentBarHistoryViewModel
+
+<h3>Histórico de compras</h3>
+
+@if (!Model.Orders.Any())
+{
+		<p>O histórico está vazio</p>
+}
+else
+{
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>Nome do produto</th>
+					<th>Preço</th>
+					<th>Quantidade</th>
+					<th>Total</th>
+					<th>Data de compra</th>
+				</tr>
+			</thead>
+			<tbody>
+			@foreach (var order in Model.Orders)
+			{
+				<tr>
+					<td>@order.ProductName</td>
+					<td>@String.Format("{0:0.00} €", order.Price)</td>
+					<td>@order.Quantity</td>
+					<td>@String.Format("{0:0.00} €", order.Total)</td>
+					<td>@order.PurchasedAt</td>
+				</tr>
+			}
+			</tbody>
+		</table>
+}

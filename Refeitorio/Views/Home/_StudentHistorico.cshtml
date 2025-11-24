@@ -1,0 +1,37 @@
+﻿@model Refeitorio.ViewModels.StudentHistoryViewModel
+
+<div class="container">
+    <h5>As minhas marcações</h5>
+    @if (Model.Bookings == null || !Model.Bookings.Any())
+    {
+        <div class="card" style="padding:12px;">Não existem marcações</div>
+    }
+    else
+    {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Date</th>
+                        <th>Option</th>
+                   </tr>
+               </thead>
+               <tbody>
+                @foreach (var p in Model.Bookings)
+                {
+                            <tr>
+                                <td>@p.Id</td>
+                                <td>@p.Date</td>
+                                <td>@(p.Option)</td>
+                                <td>
+                                    <form asp-controller="Home" asp-action="CancelBooking" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@p.Id" />
+                                        <button type="submit" class="btn btn-success btn-sm">Cancelar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                }
+                </tbody>
+            </table>
+    }
+</div>

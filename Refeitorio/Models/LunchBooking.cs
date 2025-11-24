@@ -3,13 +3,9 @@
     public class LunchBooking
     {
         public int Id { get; set; }
-        public string UserId { get; set; }
-        public User User { get; set; }
-
-        public int MenuDayId { get; set; }
-        public MenuDay MenuDay { get; set; }
-
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public string Status { get; set; } = "Ativa";
+        public string UserEmail { get; set; } = "";
+        public string Date { get; set; } = ""; // "2025-04-05"
+        public string Option { get; set; } = ""; // "Normal" or "Vegetariano"
+        public DateTime BookedAt { get; set; } = DateTime.Now;
     }
 }
