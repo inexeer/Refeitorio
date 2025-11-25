@@ -217,45 +217,40 @@ $(document).on("click", ".comprar-btn", function () {
     if (btn.prop("disabled")) return;
 
     const productId = btn.data("id");
-    const productName = btn.data("name");
-    const price = parseFloat(btn.data("price"));
-
-    // Get quantity from nearby input
     const qtyInput = btn.closest(".card-body").find(".qty-input");
-    const quantity = qtyInput.length > 0 ? parseInt(qtyInput.val()) : 1;
+    const quantity = qtyInput.length > 0 ? parseInt(qtyInput.val()) || 1 : 1;
+
+    // Optional: disable button during request
+    btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm"></span>');
 
     $.post("/Home/BuyProduct", { productId: productId, quantity: quantity })
         .done(function (res) {
             if (res.success) {
+                // ONLY UPDATE UI IF PURCHASE WAS SUCCESSFUL
                 alert(res.message);
 
-                $("#currentSaldo").text(res.newSaldo.toFixed(2) + " €");
-                $("#navbarSaldo").text(res.newSaldo.toFixed(2) + " €");
+                // Update saldo
+                $("#currentSaldo, #navbarSaldo").text(res.newSaldo.toFixed(2) + " €");
 
+                // ONLY UPDATE STOCK IF SUCCESS
                 if (res.newStock !== undefined) {
                     const cardBody = btn.closest(".card-body");
-
-                    // Update stock text
                     const stockSpan = cardBody.find("span").filter(function () {
-                        return $(this).text().includes("unid.") || $(this).text().includes("Out of stock");
+                        return $(this).text().includes("unid.") || $(this).text().includes("esgotado");
                     });
 
                     if (res.newStock > 0) {
-                        stockSpan.text(res.newStock + " unid.").removeClass("text-danger").addClass("text-success");
+                        stockSpan.text(res.newStock + " unid.")
+                            .removeClass("text-danger")
+                            .addClass("text-success");
                     } else {
-                        // FULL OUT-OF-STOCK LOOK
                         stockSpan.text("Produto esgotado")
                             .removeClass("text-success")
                             .addClass("text-danger fw-bold");
 
-                        // Hide quantity controls
                         cardBody.find(".qty-controls").remove();
+                        btn.prop("disabled", true).text("Esgotado");
 
-                        // Disable and update buy button
-                        btn.prop("disabled", true)
-                            .text("Comprar");
-
-                        // Show the "out of stock" message below buttons (like initial state)
                         if (cardBody.find(".text-danger.text-center.small").length === 0) {
                             btn.closest(".d-flex").after(
                                 '<small class="text-danger text-center mt-2 d-block">Produto esgotado</small>'
@@ -269,6 +264,10 @@ $(document).on("click", ".comprar-btn", function () {
         })
         .fail(function () {
             alert("Compra falhou. Tenta novamente.");
+        })
+        .always(function () {
+            // Re-enable button
+            btn.prop("disabled", false).html("Comprar");
         });
 });
 
@@ -306,3 +305,4 @@ $(document).on("submit", "#topupForm", function (e) {
             $btn.prop("disabled", false).html('Carregar');
         });
 });
+

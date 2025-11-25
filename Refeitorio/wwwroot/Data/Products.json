@@ -11,7 +11,7 @@
     "Fat": 100,
     "Carbs": 100,
     "Allergens": "Lactose",
-    "Stock": 0
+    "Stock": 968
   },
   {
     "Id": 2,
@@ -67,6 +67,20 @@
     "Fat": 12,
     "Carbs": 12,
     "Allergens": "12",
-    "Stock": 7
+    "Stock": 0
+  },
+  {
+    "Id": 6,
+    "CategoryId": 0,
+    "Category": "Doces",
+    "Name": "Pastel de nata",
+    "Description": "abc",
+    "Price": 1.2,
+    "Kcal": 150,
+    "Protein": 8,
+    "Fat": 10,
+    "Carbs": 20,
+    "Allergens": "Ovo",
+    "Stock": 9
   }
 ]

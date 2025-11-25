@@ -98,5 +98,55 @@
     "Total": 12,
     "UserEmail": "aluno@inete.net",
     "PurchasedAt": "2025-11-24T15:15:57.9039088+00:00"
+  },
+  {
+    "Id": 11,
+    "ProductId": 5,
+    "ProductName": "test",
+    "Price": 12,
+    "Quantity": 1,
+    "Total": 12,
+    "UserEmail": "i230064@inete.net",
+    "PurchasedAt": "2025-11-25T15:08:13.6889481+00:00"
+  },
+  {
+    "Id": 12,
+    "ProductId": 5,
+    "ProductName": "test",
+    "Price": 12,
+    "Quantity": 1,
+    "Total": 12,
+    "UserEmail": "i230064@inete.net",
+    "PurchasedAt": "2025-11-25T15:08:33.5955054+00:00"
+  },
+  {
+    "Id": 13,
+    "ProductId": 5,
+    "ProductName": "test",
+    "Price": 12,
+    "Quantity": 1,
+    "Total": 12,
+    "UserEmail": "i230064@inete.net",
+    "PurchasedAt": "2025-11-25T15:08:40.4774919+00:00"
+  },
+  {
+    "Id": 14,
+    "ProductId": 1,
+    "ProductName": "fasfas",
+    "Price": 2.50,
+    "Quantity": 1,
+    "Total": 2.50,
+    "UserEmail": "i230064@inete.net",
+    "PurchasedAt": "2025-11-25T15:20:48.1828522+00:00"
+  },
+  {
+    "Id": 15,
+    "ProductId": 6,
+    "ProductName": "Pastel de nata",
+    "Price": 1.2,
+    "Quantity": 1,
+    "Total": 1.2,
+    "UserEmail": "i230064@inete.net",
+    "PurchasedAt": "2025-11-25T16:32:10.9342877+00:00"
   }
 ]

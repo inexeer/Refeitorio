@@ -306,7 +306,8 @@ namespace Refeitorio.Controllers
 
             var vm = new StudentBarViewModel
             {
-                Products = m_productService.GetAllProducts()
+                Products = m_productService.GetAllProducts(),
+                Categories = m_productService.GetAllCategories()
             };
             return PartialView("_StudentBar", vm);
         }
@@ -330,9 +331,6 @@ namespace Refeitorio.Controllers
             if (product == null)
                 return Json(new { success = false, message = "Produto nao encontrado." });
 
-            if (!m_productService.TryDecrementStock(productId, quantity))
-                return Json(new { success = false, message = "Nao tem stock suficiente!" });
-
             decimal totalPrice = product.Price * quantity;
 
             if (user.Saldo < totalPrice)
@@ -343,6 +341,9 @@ namespace Refeitorio.Controllers
                     message = $"Saldo insuficiente! Faltam {(totalPrice - user.Saldo):0.00} €"
                 });
             }
+
+            if (!m_productService.TryDecrementStock(productId, quantity))
+                return Json(new { success = false, message = "Nao tem stock suficiente!" });
 
             m_userService.AddSaldo(userEmail, -totalPrice);
             var novoSaldo = user.Saldo;

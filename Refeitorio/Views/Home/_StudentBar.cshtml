@@ -1,32 +1,49 @@
 ﻿@model Refeitorio.ViewModels.StudentBarViewModel
 
-<!-- SEARCH BAR -->
-@* <div class="row mb-4">
-    <div class="col-12 col-md-6 col-lg-4 mx-auto">
-        <div class="input-group input-group-lg shadow-sm">
-            <span class="input-group-text bg-white border-end-0">
-                <i class="bi bi-search"></i>
-            </span>
-            <input type="text"
-                   id="productSearch"
-                   class="form-control border-start-0"
-                   placeholder="Pesquisar produtos..."
-                   autocomplete="off">
+<div class="row mb-4">
+    <div class="col-12 col-md-8 col-lg-6 mx-auto">
+        <div class="d-flex gap-3 align-items-center justify-content-center flex-wrap">
+
+            <div class="input-group input-group-sm shadow-sm rounded-pill overflow-hidden flex-fill" style="max-width: 380px; background: white;">
+                <span class="input-group-text bg-white border-0 text-primary">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="text"
+                       id="productSearch"
+                       class="form-control bg-white border-0 ps-0"
+                       placeholder="Pesquisar produtos..."
+                       autocomplete="off">
+                <button class="btn btn-white border-0 text-muted" type="button" id="clearSearch">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <select id="categoryFilter" class="form-select form-select-sm rounded-pill shadow-sm" style="width: auto; min-width: 200px;">
+                <option value="">Todas as categorias</option>
+                @foreach (var cat in Model.Categories.OrderBy(c => c))
+                {
+                    <option value="@cat.ToLowerInvariant()">@cat</option>
+                }
+            </select>
         </div>
+
         <small class="text-muted d-block text-center mt-2">
-            <span id="searchCount">@Model.Products.Count</span> produtos encontrados
+            <span id="searchCount">@Model.Products.Count</span>
         </small>
     </div>
-</div> *@
+</div>
 
-<!-- PRODUCTS GRID — ADDED ID SO JS CAN FIND IT -->
+<div id="noResultsSearch" class="text-center py-5 d-none">
+    <p class="text-muted fs-4">Nenhum produto encontrado.</p>
+</div>
+
+
 <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mt-3" id="productsContainer">
     @foreach (var p in Model.Products)
     {
-            <!-- ADDED: data-name and data-category + class "product-card" -->
             <div class="col product-card"
-                 data-name="@p.Name.ToLowerInvariant()"
-                 data-category="@p.Category.ToLowerInvariant()">
+                    data-name="@(p.Name?.ToLowerInvariant() ?? "")"
+                    data-category="@(p.Category?.ToLowerInvariant() ?? "")">
                 <div class="card h-100 shadow-sm border-0">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title mb-2">@p.Name</h5>
@@ -63,10 +80,10 @@
                                 Detalhes
                             </button>
                         </div>
-                    @if (p.Stock <= 0)
+                    @* @if (p.Stock <= 0)
                     {
                                 <small class="text-danger text-center mt-2 d-block">Produto esgotado</small>
-                    }
+                    } *@
                     </div>
                 </div>
             </div>
@@ -84,41 +101,3 @@
             <p class="text-muted fs-4">Ainda não há produtos disponíveis.</p>
         </div>
 }
-
-@* @section Scripts {
-    <script>
-
-        $(function () {
-            const $search = $("#productSearch");
-            const $cards  = $(".product-card");
-            const $count  = $("#searchCount");
-            const $noRes  = $("#noResults");
-
-            $search.on("input", function () {
-                const term = this.value.toLowerCase().trim();
-                let visible = 0;
-
-                $cards.each(function () {
-                    const name = $(this).data("name") || "";
-                    const cat  = $(this).data("category") || "";
-
-                    if (!term || name.includes(term) || cat.includes(term)) {
-                        $(this).closest(".col").show();
-                        visible++;
-                    } else {
-                        $(this).closest(".col").hide();
-                    }
-                });
-
-                $count.text(visible === 1 ? "1 produto encontrado" :
-                           visible === 0 && term ? "0 produtos" :
-                           visible + " produtos encontrados");
-
-                $noRes.toggleClass("d-none", visible > 0 || !term);
-            });
-
-            // Clear button
-            $search.on("search", () => $search.trigger("input"));
-        });
-    </script>
-} *@

@@ -14,6 +14,7 @@
                         <th>Id</th>
                         <th>Date</th>
                         <th>Option</th>
+                        <th>Cancel</th>
                    </tr>
                </thead>
                <tbody>
@@ -24,11 +25,18 @@
                                 <td>@p.Date</td>
                                 <td>@(p.Option)</td>
                                 <td>
-                                    <form asp-controller="Home" asp-action="CancelBooking" method="post" class="d-inline">
-                                        <input type="hidden" name="id" value="@p.Id" />
-                                        <button type="submit" class="btn btn-success btn-sm">Cancelar</button>
-                                    </form>
-                                </td>
+                                    @if (Refeitorio.Services.BookingRules.CanBook(DateTime.Parse(p.Date)))
+                                    {
+                                        <form asp-controller="Home" asp-action="CancelBooking" method="post" class="d-inline">
+                                            <input type="hidden" name="id" value="@p.Id" />
+                                            <button type="submit" class="btn btn-success btn-sm">Cancelar</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                <span class="text-muted small">Cancelamento indisponível</span>
+                                    }
+                        </td>
                             </tr>
                 }
                 </tbody>
