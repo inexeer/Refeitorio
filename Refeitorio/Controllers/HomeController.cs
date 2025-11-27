@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.IO;
 using System.Reflection;
 using System;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
 namespace Refeitorio.Controllers
 {
@@ -182,17 +183,53 @@ namespace Refeitorio.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateProduct(Product model)
+        public IActionResult CreateProduct(CreateProductViewModel model)
         {
             if (ModelState.IsValid)
             {
-                model.Id = m_productService.GetAll().Any()
-            ? m_productService.GetAll().Max(m => m.Id) + 1
-            : 1;
-                m_productService.AddProduct(model);
+                var product = new Product
+                {
+                    Id = m_productService.GetAll().Any()
+            ? m_productService.GetAll().Max(p => p.Id) + 1
+            : 1,
+                    Category = model.Category,
+                    Name = model.Name,
+                    Description = model.Description,
+                    Price = model.Price,
+                    Kcal = model.Kcal,
+                    Protein = model.Protein,
+                    Fat = model.Fat,
+                    Carbs = model.Carbs,
+                    Allergens = model.Allergens,
+                    Stock = model.Stock,
+                    ImageFileName = "default.jpg"
+                };
+
+                if (model.ImageFile != null && model.ImageFile.Length > 0)
+                {
+                    var ext = Path.GetExtension(model.ImageFile.FileName).ToLowerInvariant();
+                    var allowed = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+
+                    if (!allowed.Contains(ext))
+                    {
+                        ModelState.AddModelError("ImageFile", "Formato inválido.");
+                        return View(model);
+                    }
+
+                    product.ImageFileName = $"{product.Id}{ext}";
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "productImages", product.ImageFileName);
+
+                    Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        model.ImageFile.CopyTo(stream);
+                    }
+                }
+
+                m_productService.AddProduct(product);
                 return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            return View(model);
         }
 
         [HttpPost]
@@ -214,16 +251,67 @@ namespace Refeitorio.Controllers
 
             var product = m_productService.GetById(id);
             if (product == null) return NotFound();
-
-            return PartialView("_FuncEditProduct", product);
+            var vm = new EditProductViewModel
+            {
+                Id = product.Id,
+                Category = product.Category,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                Kcal = product.Kcal,
+                Protein = product.Protein,
+                Fat = product.Fat,
+                Carbs = product.Carbs,
+                Allergens = product.Allergens,
+                Stock = product.Stock,
+                CurrentImageFileName = product.ImageFileName
+            };
+            return PartialView("_FuncEditProduct", vm);
         }
 
         [HttpPost]
-        public IActionResult EditProduct(Product updatedProduct)
+        public IActionResult EditProduct(EditProductViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                m_productService.UpdateProduct(updatedProduct);
+                var existingProduct = m_productService.GetById(vm.Id);
+                if (existingProduct == null) return NotFound();
+
+                existingProduct.Category = vm.Category;
+                existingProduct.Name = vm.Name;
+                existingProduct.Description = vm.Description;
+                existingProduct.Price = vm.Price;
+                existingProduct.Kcal = vm.Kcal;
+                existingProduct.Protein = vm.Protein;
+                existingProduct.Fat = vm.Fat;
+                existingProduct.Carbs = vm.Carbs;
+                existingProduct.Allergens = vm.Allergens;
+                existingProduct.Stock = vm.Stock;
+
+                if (vm.NewImageFile != null && vm.NewImageFile.Length > 0)
+                {
+                    var allowed = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+                    var ext = Path.GetExtension(vm.NewImageFile.FileName).ToLowerInvariant();
+
+                    if (!allowed.Contains(ext))
+                    {
+                        ModelState.AddModelError("NewImageFile", "Formato inválido.");
+                        return View(vm);
+                    }
+
+                    var newFileName = $"{vm.Id}{ext}";
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "productImages", newFileName);
+
+                    Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        vm.NewImageFile.CopyTo(stream);
+                    }
+
+                    existingProduct.ImageFileName = newFileName;
+                }
+
+                m_productService.UpdateProduct(existingProduct);
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Index");

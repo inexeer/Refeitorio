@@ -96,7 +96,17 @@
     "PasswordHash": "WuhfYgIpd0\u002Bf2Xuzp\u002BgsQFcpGoMjqO5cpQ/mXyWoQyQ=",
     "Role": 3,
     "Nif": "987678456",
-    "Saldo": 3,
+    "Saldo": 100.90,
+    "IsApproved": true
+  },
+  {
+    "Id": "b1e31376-53ab-43b4-ac7c-0630b89c5bd2",
+    "FullName": "func test",
+    "Email": "functest@inete.net",
+    "PasswordHash": "WuhfYgIpd0\u002Bf2Xuzp\u002BgsQFcpGoMjqO5cpQ/mXyWoQyQ=",
+    "Role": 1,
+    "Nif": "765890931",
+    "Saldo": 0,
     "IsApproved": true
   }
 ]

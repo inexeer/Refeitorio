@@ -14,7 +14,7 @@
                 </div>
 
                 <div class="card-body">
-                    <form asp-controller="Home" asp-action="CreateProduct" method="post">
+                    <form asp-controller="Home" asp-action="CreateProduct" method="post" enctype="multipart/form-data">
 
                         <div class="mb-3">
                             <label asp-for="Category" class="form-label">Categoria</label>
@@ -74,6 +74,12 @@
                             <label asp-for="Stock" class="form-label">Stock</label>
                             <input asp-for="Stock" type="number" class="form-control" min="0" step="1" />
                             <span asp-validation-for="Stock" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Imagem do produto</label>
+                            <input type="file" name="ImageFile" accept="image/*" class="form-control" />
+                            <div class="form-text">Formatos: JPG, PNG, GIF, WEBP.</div>
                         </div>
 
                         <button type="submit" class="btn btn-success w-100">Submit</button>

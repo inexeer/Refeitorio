@@ -148,5 +148,15 @@
     "Total": 1.2,
     "UserEmail": "i230064@inete.net",
     "PurchasedAt": "2025-11-25T16:32:10.9342877+00:00"
+  },
+  {
+    "Id": 16,
+    "ProductId": 2,
+    "ProductName": "aaaaaaa",
+    "Price": 2.10,
+    "Quantity": 1,
+    "Total": 2.10,
+    "UserEmail": "aluno@inete.net",
+    "PurchasedAt": "2025-11-27T14:19:56.5645828+00:00"
   }
 ]

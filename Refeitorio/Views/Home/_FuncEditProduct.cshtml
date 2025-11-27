@@ -1,4 +1,4 @@
-﻿@model Refeitorio.Models.Product
+﻿@model Refeitorio.ViewModels.EditProductViewModel
 
 @{
     ViewData["Title"] = "Editar produto";
@@ -14,7 +14,7 @@
                 </div>
 
                 <div class="card-body">
-                    <form asp-controller="Home" asp-action="EditProduct" method="post">
+                    <form asp-controller="Home" asp-action="EditProduct" method="post" enctype="multipart/form-data">
                         <input type="hidden" asp-for="Id" />
 
                         <div class="mb-3">
@@ -75,6 +75,20 @@
                             <label asp-for="Stock" class="form-label">Stock</label>
                             <input asp-for="Stock" type="number" class="form-control" min="0" step="1" />
                             <span asp-validation-for="Stock" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Imagem atual</label>
+                            <div class="text-center mb-3">
+                                <img src="~/productImages/@Model.CurrentImageFileName"
+                                     alt="Imagem atual"
+                                     class="img-fluid rounded shadow-sm"
+                                     style="max-height: 250px; object-fit: contain;"
+                                     onerror="this.src='~/productImages/default.jpg'">
+                            </div>
+                            <label class="form-label">Substituir imagem (opcional)</label>
+                            <input type="file" name="NewImageFile" accept="image/*" class="form-control" />
+                            <div class="form-text">Deixe vazio para manter a imagem atual.</div>
                         </div>
 
                         <button type="submit" class="btn btn-success w-100">Submit</button>

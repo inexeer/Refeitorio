@@ -8,10 +8,15 @@
                 <div class="row g-0">
                     <!-- Imagem (placeholder bonito) -->
                     <div class="col-md-5 bg-light d-flex align-items-center justify-content-center">
-                        <div class="text-center p-5">
-                            <i class="bi bi-image display-1 text-muted"></i>
-                            <p class="text-muted mt-3">Sem imagem</p>
-                        </div>
+                        <img src="~/productImages/@Model.ImageFileName"
+                             alt="@Model.Name"
+                             class="img-fluid rounded shadow-sm"
+                             style="max-height: 400px; object-fit: contain;"
+                             onerror="this.onerror=null; this.src='~/productImages/default.jpg';
+                             this.closest('div').innerHTML=`<div class='text-center p-5'>
+                            <i class='bi bi-image display-1 text-muted'></i>
+                            <p class='text-muted mt-3'>Sem imagem</p>
+                        </div>`;">
                     </div>
 
                     <!-- Informações -->

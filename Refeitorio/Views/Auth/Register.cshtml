@@ -56,8 +56,12 @@
                     <span asp-validation-for="Nif" class="text-danger"></span>
                 </div>
                 <div class="input-group">
-                    <select asp-for="Role" asp-items="Html.GetEnumSelectList<UserType>()" class="form-select">
+                    <select asp-for="Role" class="form-select">
                         <option value="">--Selecione o cargo--</option>
+                        @foreach (var item in Html.GetEnumSelectList<UserType>().Where(u => u.Value != ((int)UserType.Admin).ToString()))
+                        {
+                            <option value="@item.Value" selected="@(item.Selected)">@item.Text</option>
+                        }
                     </select>
                 </div>
                 <div class="error-span">
