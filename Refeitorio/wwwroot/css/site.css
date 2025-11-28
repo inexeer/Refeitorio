@@ -30,7 +30,8 @@ body {
 }
 
 .refeitorio-title {
-    margin: 30px;
+    margin-bottom: 20px;
+    margin-top: 150px;
 }
 
 .login-plate {
@@ -91,4 +92,13 @@ body {
 
 .login-plate-register form {
     text-align: center;
+}
+
+.search-form {
+    width: 335px;
+}
+
+.search-form:focus {
+    outline: none;
+    box-shadow: none;
 }

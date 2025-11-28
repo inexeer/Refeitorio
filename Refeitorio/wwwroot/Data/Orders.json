@@ -158,5 +158,15 @@
     "Total": 2.10,
     "UserEmail": "aluno@inete.net",
     "PurchasedAt": "2025-11-27T14:19:56.5645828+00:00"
+  },
+  {
+    "Id": 17,
+    "ProductId": 1,
+    "ProductName": "Pastel de Nata",
+    "Price": 1.20,
+    "Quantity": 1,
+    "Total": 1.20,
+    "UserEmail": "aluno@inete.net",
+    "PurchasedAt": "2025-11-28T14:44:37.3407972+00:00"
   }
 ]

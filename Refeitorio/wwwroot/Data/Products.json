@@ -11,7 +11,22 @@
     "Fat": 12,
     "Carbs": 20,
     "Allergens": "Ovo",
-    "Stock": 6,
+    "Stock": 5,
     "ImageFileName": "1.jpg"
+  },
+  {
+    "Id": 2,
+    "CategoryId": 0,
+    "Category": "Sandes",
+    "Name": "Tosta Mista",
+    "Description": "-",
+    "Price": 2.10,
+    "Kcal": 200,
+    "Protein": 15,
+    "Fat": 12,
+    "Carbs": 50,
+    "Allergens": "Lactose",
+    "Stock": 15,
+    "ImageFileName": "default.jpg"
   }
 ]

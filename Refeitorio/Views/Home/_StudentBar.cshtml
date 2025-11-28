@@ -10,20 +10,26 @@
                 </span>
                 <input type="text"
                        id="productSearch"
-                       class="form-control bg-white border-0 ps-0"
+                       class="search-form"
                        placeholder="Pesquisar produtos..."
                        autocomplete="off">
                 <button class="btn btn-white border-0 text-muted" type="button" id="clearSearch">
-                    <i class="bi bi-x-lg"></i>
+                    <i class="bi bi-x-lg">X</i>
                 </button>
             </div>
 
-            <select id="categoryFilter" class="form-select form-select-sm rounded-pill shadow-sm" style="width: auto; min-width: 200px;">
+            <select id="categoryFilter" class="form-select form-select-sm rounded-pill shadow-sm border-0" style="width: auto; min-width: 200px;">
                 <option value="">Todas as categorias</option>
                 @foreach (var cat in Model.Categories.OrderBy(c => c))
                 {
                     <option value="@cat.ToLowerInvariant()">@cat</option>
                 }
+            </select>
+
+            <select id="priceSort" class="form-select form-select-sm rounded-pill shadow-sm border-0" style="min-width: 160px;">
+                <option value="">Ordenar por preço</option>
+                <option value="low-high">Preço: Menor → Maior</option>
+                <option value="high-low">Preço: Maior → Menor</option>
             </select>
         </div>
 
@@ -44,7 +50,7 @@
             <div class="col product-card"
                     data-name="@(p.Name?.ToLowerInvariant() ?? "")"
                     data-category="@(p.Category?.ToLowerInvariant() ?? "")">
-                <div class="card h-100 shadow-sm border-0">
+                    <div class="card h-100 shadow-sm border-0">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title mb-2">@p.Name</h5>
                         <p class="card-text text-muted small mb-1">
@@ -80,17 +86,12 @@
                                 Detalhes
                             </button>
                         </div>
-                    @* @if (p.Stock <= 0)
-                    {
-                                <small class="text-danger text-center mt-2 d-block">Produto esgotado</small>
-                    } *@
                     </div>
                 </div>
             </div>
     }
 </div>
 
-<!-- ADDED: No results message (hidden by default) -->
 <div id="noResults" class="text-center py-5 d-none">
     <p class="text-muted fs-4">Nenhum produto encontrado.</p>
 </div>
