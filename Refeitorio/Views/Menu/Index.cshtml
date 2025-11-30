@@ -13,7 +13,7 @@
 {
     <div class="alert alert-info">@TempData["Message"]</div>
 }
-<!-- Selector de opção -->
+
 <div class="mb-3">
     <a class="btn btn-outline-primary @(selectedOption == "Normal" ? "active" : "")"
         asp-controller="Menu" asp-action="Index" asp-route-week="@Model.WeekNumber" asp-route-option="Normal">Normal</a>
@@ -25,7 +25,6 @@
         asp-controller="Menu" asp-action="Index" asp-route-week="@Model.WeekNumber" asp-route-option="All">Mostrar ambos</a>
 </div>
 
-<!-- Abas de semanas (preservam a opção selecionada) -->
 <ul class="nav nav-tabs mb-3">
     @foreach (var w in weeks)
     {

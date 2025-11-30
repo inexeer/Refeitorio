@@ -26,7 +26,7 @@
     "Fat": 12,
     "Carbs": 50,
     "Allergens": "Lactose",
-    "Stock": 15,
+    "Stock": 11,
     "ImageFileName": "default.jpg"
   },
   {
@@ -35,7 +35,7 @@
     "Category": "abc",
     "Name": "abc",
     "Description": "abc",
-    "Price": 1,
+    "Price": 3.00,
     "Kcal": 1,
     "Protein": 1,
     "Fat": 1,

@@ -7,7 +7,9 @@ namespace Refeitorio.Services
     public class AdminMenuService
     {
         public List<MenuDay> Menus { get; set; } = new List<MenuDay>();
-        public Dictionary<DateOnly, MenuDay> LunchByDate { get; private set; } = new();
+
+        public Dictionary<DateOnly, Dictionary<MenuOption, MenuDay>> LunchByDate { get; private set; } = new();
+
         public List<MenuDay> GetAll() => Menus;
 
         public AdminMenuService()
@@ -23,9 +25,13 @@ namespace Refeitorio.Services
             SaveMenus();
         }
 
+
         public void SaveLunch(MenuDay menuDay, DateOnly data)
         {
-            LunchByDate[data] = menuDay;
+            if (!LunchByDate.ContainsKey(data))
+                LunchByDate[data] = new Dictionary<MenuOption, MenuDay>();
+
+            LunchByDate[data][menuDay.Option] = menuDay;
         }
 
         public void SerializarDict()
@@ -35,14 +41,18 @@ namespace Refeitorio.Services
 
             var dataForJson = LunchByDate.ToDictionary(
                 k => k.Key.ToString("yyyy-MM-dd"),
-                v => new
-                {
-                    v.Value.Id,
-                    v.Value.MainDish,
-                    v.Value.Soup,
-                    v.Value.Dessert,
-                    Option = v.Value.Option.ToString()
-                });
+                v => v.Value.ToDictionary(
+                    opt => opt.Key.ToString(),
+                    menu => new
+                    {
+                        menu.Value.Id,
+                        menu.Value.MainDish,
+                        menu.Value.Soup,
+                        menu.Value.Dessert,
+                        Option = menu.Value.Option.ToString()
+                    }
+                )
+            );
 
             string json = JsonSerializer.Serialize(dataForJson, new JsonSerializerOptions
             {
@@ -58,7 +68,7 @@ namespace Refeitorio.Services
 
             if (!File.Exists(path))
             {
-                LunchByDate = new Dictionary<DateOnly, MenuDay>();
+                LunchByDate = new Dictionary<DateOnly, Dictionary<MenuOption, MenuDay>>();
                 return;
             }
 
@@ -68,44 +78,59 @@ namespace Refeitorio.Services
 
                 if (string.IsNullOrWhiteSpace(json))
                 {
-                    LunchByDate = new Dictionary<DateOnly, MenuDay>();
+                    LunchByDate = new Dictionary<DateOnly, Dictionary<MenuOption, MenuDay>>();
                     return;
                 }
 
-                var tempDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json);
 
-                if (tempDict == null || tempDict.Count == 0)
+                var tempDict = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, JsonElement>>>(json);
+
+                LunchByDate = new Dictionary<DateOnly, Dictionary<MenuOption, MenuDay>>();
+
+                if (tempDict != null)
                 {
-                    LunchByDate = new Dictionary<DateOnly, MenuDay>();
-                    return;
-                }
-
-                LunchByDate = new Dictionary<DateOnly, MenuDay>();
-
-                foreach (var kvp in tempDict)
-                {
-                    if (!DateOnly.TryParse(kvp.Key, out DateOnly date))
-                        continue;
-
-                    var obj = kvp.Value;
-
-                    if (!obj.TryGetProperty("Id", out JsonElement idElement))
-                        continue;
-
-                    int menuId = idElement.GetInt32();
-
-                    var menuDay = Menus.FirstOrDefault(m => m.Id == menuId);
-
-                    if (menuDay != null)
+                    foreach (var dayEntry in tempDict)
                     {
-                        LunchByDate[date] = menuDay;
+                        if (!DateOnly.TryParse(dayEntry.Key, out DateOnly date))
+                            continue;
+
+                        var optionMenus = new Dictionary<MenuOption, MenuDay>();
+                        foreach (var optKvp in dayEntry.Value)
+                        {
+                            if (!Enum.TryParse<MenuOption>(optKvp.Key, true, out var option)) continue;
+
+                            var obj = optKvp.Value;
+                            int id = obj.GetProperty("Id").GetInt32();
+
+
+                            var menuDay = Menus.FirstOrDefault(m => m.Id == id);
+
+                            if (menuDay != null)
+                            {
+                                optionMenus[option] = menuDay;
+                            }
+                            else
+                            {
+
+                                optionMenus[option] = new MenuDay
+                                {
+                                    Id = id,
+                                    MainDish = obj.TryGetProperty("MainDish", out var mainDishProp) ? mainDishProp.GetString() ?? "" : "",
+                                    Soup = obj.TryGetProperty("Soup", out var soupProp) ? soupProp.GetString() ?? "" : "",
+                                    Dessert = obj.TryGetProperty("Dessert", out var dessertProp) ? dessertProp.GetString() ?? "" : "",
+                                    Option = option
+                                };
+                            }
+                        }
+                        if (optionMenus.Count > 0)
+                            LunchByDate[date] = optionMenus;
                     }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Erro ao carregar MenuData.json: {ex.Message}");
-                LunchByDate = new Dictionary<DateOnly, MenuDay>();
+                LunchByDate = new Dictionary<DateOnly, Dictionary<MenuOption, MenuDay>>();
             }
         }
 
@@ -142,6 +167,19 @@ namespace Refeitorio.Services
             catch
             {
                 Menus = new List<MenuDay>();
+            }
+        }
+
+        public void RemoveLunch(DateOnly date, MenuOption option)
+        {
+            if (LunchByDate.TryGetValue(date, out var dayDict))
+            {
+                if (dayDict.ContainsKey(option))
+                {
+                    dayDict.Remove(option);
+                    if (dayDict.Count == 0)
+                        LunchByDate.Remove(date);
+                }
             }
         }
     }

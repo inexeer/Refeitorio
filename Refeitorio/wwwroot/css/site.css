@@ -102,3 +102,317 @@ body {
     outline: none;
     box-shadow: none;
 }
+
+
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    color: #213547;
+    background: #ffffff;
+}
+
+
+.error-span {
+    height: 25px;
+}
+
+    .error-span span {
+        margin: 0;
+        padding: 0;
+    }
+
+
+.booking-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    font-family: inherit;
+}
+
+.booking-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(2px);
+}
+
+.booking-modal-dialog {
+    position: relative;
+    max-width: 980px;
+    width: 100%;
+    margin: 0 12px;
+}
+
+.booking-modal .card {
+    border-radius: 12px;
+    overflow: visible;
+}
+
+.booking-card {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+    .booking-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 30px rgba(20,20,40,0.12);
+    }
+
+.booking-card-img {
+    height: 160px;
+    background: #f5f7f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+    .booking-card-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .booking-card-img.no-img {
+        background: #f3f5f6;
+        color: #7d8a90;
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+
+.no-img-placeholder {
+    color: #7d8a90;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+.booking-card .card-body {
+    padding: 18px;
+}
+
+.booking-card .card-title {
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #243243;
+}
+
+.booking-card p.text-muted {
+    color: #6b7280;
+}
+
+.booking-card ul li {
+    margin-bottom: 6px;
+}
+
+.disabled-card {
+    opacity: 0.75;
+    background: linear-gradient(180deg,#fbfbfb,#ffffff);
+    border-radius: 10px;
+    box-shadow: none;
+    transform: none;
+}
+
+.booking-modal .btn {
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 8px 12px;
+}
+
+.booking-modal .btn-success {
+    background: linear-gradient(90deg,#1e9b5a,#109e73);
+    border: none;
+    box-shadow: 0 6px 18px rgba(16,158,115,0.18);
+    color: white;
+}
+
+.booking-modal .btn-outline-secondary {
+    border-color: #d1d5db;
+    color: #374151;
+}
+
+@media (max-width: 767px) {
+    .booking-modal .row > .col-md-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .booking-card-img {
+        height: 140px;
+    }
+}
+
+.booking-card .no-img-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6b7280;
+    font-weight: 600;
+    background: #f3f5f6;
+}
+
+.booking-modal .card-header {
+    background: #fff;
+    border-bottom: 0;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#bookingModalClose {
+    border-radius: 6px;
+    border: 1px solid #e6e9ee;
+    padding: 6px 8px;
+}
+
+.booking-modal small {
+    color: #6b7280;
+}
+
+
+.login-page {
+    background: linear-gradient(180deg,#f8fbff 0%, #ffffff 60%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 20px;
+}
+
+.login-wrapper {
+    width: 100%;
+}
+
+.login-illustration {
+    width: 480px;
+    height: 480px;
+    background: linear-gradient(180deg,#f8fbfd,#ffffff);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    min-width: 320px;
+}
+
+    .login-illustration img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.site-logo {
+    width: 72px;
+    height: auto;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+
+.login-card {
+    border: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #ffffff, #fcfdff);
+    box-shadow: 0 18px 40px rgba(40,50,80,0.06);
+}
+
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #eef3f8;
+    padding: 6px 12px;
+    height: 56px;
+}
+
+    .input-with-icon .input-icon {
+        color: #6b7280;
+        font-size: 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+    }
+
+    .input-with-icon .form-control {
+        border: none;
+        box-shadow: none;
+        height: 40px;
+        padding: 0 8px;
+        background: transparent;
+    }
+
+.form-control.form-control-lg {
+    border-radius: 6px;
+    height: auto;
+}
+
+.btn-primary {
+    background: linear-gradient(90deg,#1b6ec2,#0f65b3);
+    border: none;
+    box-shadow: 0 8px 20px rgba(27,110,194,0.12);
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 700;
+}
+
+.btn-link {
+    color: #374151;
+}
+
+@media (max-width: 991px) {
+    .login-illustration {
+        width: 360px;
+        height: 360px;
+    }
+}
+
+@media (max-width: 767px) {
+    .login-illustration {
+        display: none;
+    }
+
+    .login-card .card-body {
+        padding: 20px;
+    }
+}
+
+.small {
+    font-size: .9rem;
+}
+

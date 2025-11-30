@@ -13,16 +13,16 @@ namespace Refeitorio.Controllers
     {
         private const string SessionBookingsKey = "UserBookings";
 
-        // option: "Normal", "Vegetariano" ou "All"
+
         public IActionResult Index(string option = "Normal", int week = 1)
         {
-            // carregar dados
+
             var allWeeks = MenuRepository.GetAllWeeks();
 
-            // obter semanas disponíveis para abas
+
             var weeksAvailable = allWeeks.Select(w => w.WeekNumber).ToList();
 
-            // construir intervalo de datas por semana para exibição (ex: 10/11/2025 - 14/11/2025)
+
             var weekRanges = new Dictionary<int, string>();
             //foreach (var w in allWeeks)
             //{

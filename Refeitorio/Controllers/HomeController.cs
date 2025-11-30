@@ -139,15 +139,26 @@ namespace Refeitorio.Controllers
                 return RedirectToAction("Index");
             }
 
-            var chosenId = model.SelectedVegetarianId ?? model.SelectedNormalId ?? 0;
-            var chosenMenu = m_menuService.GetAll().FirstOrDefault(m => m.Id == chosenId);
-            if (chosenMenu == null)
+            var chosenVeg = model.SelectedVegetarianId.HasValue
+                ? m_menuService.GetAll().FirstOrDefault(m => m.Id == model.SelectedVegetarianId.Value)
+                : null;
+            var chosenNorm = model.SelectedNormalId.HasValue
+                ? m_menuService.GetAll().FirstOrDefault(m => m.Id == model.SelectedNormalId.Value)
+                : null;
+
+            if (chosenNorm == null && chosenVeg == null)
             {
-                TempData["Error"] = "Menu nao encontrado.";
+                TempData["Error"] = "Seleciona pelo menos um menu.";
                 return RedirectToAction("Index");
             }
 
-            m_menuService.SaveLunch(chosenMenu, model.Data);
+            var dateOnly = model.Data;
+
+            if (chosenNorm != null)
+                m_menuService.SaveLunch(chosenNorm, dateOnly);
+
+            if (chosenVeg != null)
+                m_menuService.SaveLunch(chosenVeg, dateOnly);
 
             m_menuService.SerializarDict();
 
@@ -160,13 +171,17 @@ namespace Refeitorio.Controllers
             var data = m_menuService.LunchByDate
                 .ToDictionary(
                     k => k.Key.ToString("yyyy-MM-dd"),
-                    v => new
-                    {
-                        mainDish = v.Value.MainDish ?? "",
-                        soup = v.Value.Soup ?? "",
-                        dessert = v.Value.Dessert ?? "",
-                        option = v.Value.Option.ToString()
-                    });
+                    v => v.Value.ToDictionary(
+                        opt => opt.Key.ToString(),
+                        day => new
+                        {
+                            mainDish = day.Value.MainDish ?? "",
+                            soup = day.Value.Soup ?? "",
+                            dessert = day.Value.Dessert ?? "",
+                            option = day.Value.Option.ToString()
+                        }
+                    )
+                );
 
             return Content(JsonSerializer.Serialize(data), "application/json");
         }
@@ -327,19 +342,35 @@ namespace Refeitorio.Controllers
         }
 
         [HttpPost]
-        public IActionResult BookLunch(string date)
+        public IActionResult BookLunch(string date, string type)
         {
             var email = HttpContext.Session.GetString("User");
             if (string.IsNullOrEmpty(email))
                 return Json(new { success = false, message = "Nao autenticado" });
 
-            var menu = m_menuService.LunchByDate
-                .FirstOrDefault(x => x.Key.ToString("yyyy-MM-dd") == date).Value;
+            if (!Enum.TryParse<MenuOption>(type, out var menuOpt))
+                return Json(new { success = false, message = "Opcao de menu invalida" });
 
-            if (menu == null)
-                return Json(new { success = false, message = "Sem menu nesse dia" });
+            DateOnly parsedDate;
+            try
+            {
+                parsedDate = DateOnly.ParseExact(date, "yyyy-MM-dd");
+            }
+            catch
+            {
+                return Json(new { success = false, message = $"Data invalida: '{date}'" });
+            }
 
-            m_bookingService.BookLunch(email, date, menu.Option.ToString());
+            if (!m_menuService.LunchByDate.TryGetValue(parsedDate, out var optDict))
+            {
+                return Json(new { success = false, message = "Nao ha menu neste dia" });
+            }
+            if (!optDict.TryGetValue(menuOpt, out var menu))
+            {
+                return Json(new { success = false, message = "Nao ha menu desta opcao neste dia" });
+            }
+
+            m_bookingService.BookLunch(email, date, menuOpt.ToString());
 
             return Json(new { success = true });
         }
@@ -500,7 +531,6 @@ namespace Refeitorio.Controllers
             if (user == null)
                 return Json(new { success = false, message = "Utilizador não encontrado" });
 
-            //user.Saldo += amount;
             m_userService.AddSaldo(email, amount);
 
             return Json(new { success = true, newSaldo = user.Saldo });
@@ -512,13 +542,13 @@ namespace Refeitorio.Controllers
 
         public IActionResult Index()
         {
-            //m_productService.LoadProductsFromFile();
+
             var role = HttpContext.Session.GetString("Role");
             if (string.IsNullOrEmpty(role) || (role != "Admin" && role != "Staff" && role != "Student"))
             {
                 return RedirectToAction("Login", "Auth");
             }
-            // obter o nome do utilizador (se estiver logado)
+
             var userEmail = HttpContext.Session.GetString("User");
             if (!string.IsNullOrEmpty(userEmail))
             {
@@ -526,7 +556,7 @@ namespace Refeitorio.Controllers
                 if (user != null)
                 {
                     ViewBag.UserName = user.FullName;
-                    // calculo de iniciais (caso queiras mostrar as iniciais em vez dum avatar)
+
                     var names = user.FullName.Split(' ', System.StringSplitOptions.RemoveEmptyEntries);
                     var initials = "";
                     if (names.Length > 0) initials += names[0][0];
@@ -556,7 +586,7 @@ namespace Refeitorio.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        // helper to avoid nullable reference warnings when looking up user by email (keeps logic clearer)
+
         private Refeitorio.Models.User? m_user_service_get(string email)
         {
             return m_userService.GetUserByEmail(email);

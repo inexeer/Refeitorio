@@ -4,8 +4,8 @@
     {
         public int Id { get; set; }
         public string UserEmail { get; set; } = "";
-        public string Date { get; set; } = ""; // "2025-04-05"
-        public string Option { get; set; } = ""; // "Normal" or "Vegetariano"
+        public string Date { get; set; } = "";
+        public string Option { get; set; } = "";
         public DateTime BookedAt { get; set; } = DateTime.Now;
     }
 }

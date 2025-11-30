@@ -2,7 +2,6 @@
 
 <div class="card border-0 shadow-sm">
     <div class="card-body text-center p-4">
-        <!-- Current Balance -->
         <h5 class="text-muted mb-3">Saldo atual</h5>
         <h2 class="text-primary fw-bold mb-4" id="currentSaldo">
             @Model.Saldo.ToString("0.00") €
@@ -10,9 +9,7 @@
 
         <hr class="my-4">
 
-        <!-- Top-up Form -->
         <form id="topupForm" class="d-inline">
-            @* Prevent default submit — we use AJAX *@
             <div class="row g-3 justify-content-center">
                 <div class="col-auto">
                     <label class="visually-hidden">Valor a carregar</label>
@@ -36,7 +33,6 @@
             </div>
         </form>
 
-        <!-- Success / Error message -->
         <div id="topupMessage" class="mt-3"></div>
     </div>
 </div>

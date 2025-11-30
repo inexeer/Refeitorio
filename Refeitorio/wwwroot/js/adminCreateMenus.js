@@ -27,69 +27,83 @@ function renderCalendar() {
 
     let html = "";
 
-    // Add blank cells until the first weekday
+
     for (let i = 0; i < firstDay.getDay(); i++) {
-        html += `<div class="col-1 p-2"></div>`;
+        html += `<div class="col p-1"></div>`;
     }
 
-    // Generate calendar days
     for (let day = 1; day <= lastDay.getDate(); day++) {
         const cellDate = new Date(year, month, day);
-        const cellMidnight = new Date(year, month, day);  // Clean copy at midnight
-        cellMidnight.setHours(0, 0, 0, 0);
-
+        cellDate.setHours(0, 0, 0, 0);
         const weekdayIndex = cellDate.getDay();
-        const isWeekday = weekdayIndex >= 1 && weekdayIndex <= 5; // Monday–Friday
+        const isWeekday = weekdayIndex >= 1 && weekdayIndex <= 5; 
+        const isWeekend = !isWeekday;
 
-        // Conditions to allow booking
-        const isFuture = cellMidnight >= todayMidnight;
-        const isToday = cellMidnight.getTime() === todayMidnight.getTime();
-        const isBefore10 = today.getHours() < 10;
+        const isFutureOrToday = cellDate >= todayMidnight;
 
-        const canBook =
-            isWeekday &&
-            (
-                (isToday && isBefore10) ||      // Today and before 10:00
-                (isFuture && !isToday)          // Any future weekday
-            );
 
-        let lunchInfo = "";
         const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const menusForDay = savedLunches[dateKey] || {};
 
-        if (savedLunches[dateKey]) {
-            const menu = savedLunches[dateKey];
-            const type = menu.option === "Vegetariano" ? "Veg" : "Normal";
-            lunchInfo = `
-                <div class="text-center small">
-                    <div class="fw-bold text-success">${type}: ${menu.mainDish}</div>
-                    <small class="text-muted">${menu.soup}</small>
-                </div>`;
+
+        const cellStyle = `
+            background: ${cellDate.getTime() === todayMidnight.getTime() ? '#f3fbfc' : '#fff'};
+            width:138px; min-width:120px; max-width:153px; min-height: 134px;
+            border-radius: 18px; box-shadow: 0 2px 8px 0 rgba(60,60,90,0.07);
+            border: 1.2px solid #eaedf3;
+            margin-bottom: 7px; padding:14px 6px 12px 6px;
+            display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+            transition: box-shadow 0.13s;
+        `;
+
+        let content = `
+            <div style="font-weight:700; font-size:1.18rem; margin-bottom:.22rem;">${day}</div>
+            <div class="small text-muted mb-2" style="letter-spacing:.5px;">${weekdays[weekdayIndex]}</div>
+        `;
+
+        if (Object.keys(menusForDay).length > 0) {
+
+            content += `<div class="d-flex flex-column align-items-center gap-1 mb-2">`;
+            if (menusForDay.Normal)
+                content += `<span class="badge bg-primary mt-1 px-3 py-1 rounded-pill" style="font-size:.97rem;">Normal</span>`;
+            if (menusForDay.Vegetariano)
+                content += `<span class="badge bg-success mb-1 px-3 py-1 rounded-pill" style="font-size:.97rem;">Vegetariano</span>`;
+            content += `</div>`;
+
+            if (!isWeekend && isFutureOrToday) {
+                content += `
+                    <button class="btn btn-warning btn-sm fw-semibold select-lunch px-3 py-1 rounded-pill mt-1" 
+                            data-day="${day}" style="font-size:.99rem;">Alterar menu</button>
+                `;
+            }
+        } else if (isWeekday && isFutureOrToday) {
+
+            content += `
+                <button class="btn btn-primary btn-sm fw-semibold select-lunch px-3 py-1 rounded-pill mt-2" 
+                        data-day="${day}" style="font-size:.99rem;">Selecionar menu</button>
+            `;
+        } else if (isWeekday) {
+
+            content += `<div class="mt-3 small text-danger fw-semibold" style="font-size:1rem;">Sem menu</div>`;
         }
 
         html += `
-            <div class="col-1 border p-2 text-center dayCell d-flex flex-column align-items-center" data-day="${day}">
-                <div class="fw-bold">${day}</div>
-                <div class="small text-muted">${weekdays[weekdayIndex]}</div>
-        
-                ${savedLunches[dateKey] ? lunchInfo : (
-                        canBook
-                            ? `<button class="btn btn-sm btn-primary mt-2 select-lunch" data-day="${day}">Selecinar menu</button>`
-                            : (isWeekday ? `<small class="text-danger mt-2">Indisponível</small>` : "")
-                    )}
+        <div class="col p-1" style="max-width:165px;">
+            <div class="admin-calendar-card" style="${cellStyle}">
+                ${content}
             </div>
-        `;
+        </div>`;
     }
 
     $("#calendarGrid").html(html);
 
-    // Click select lunch button
+
     $(".select-lunch").off("click").on("click", function (e) {
         e.preventDefault();
         e.stopPropagation();
         const day = $(this).data("day");
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth() + 1;
-
         const dateString = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
         $.get("/Home/AdminSelectLunchByDate", { date: dateString }, function (data) {
@@ -107,4 +121,3 @@ $(document).on("click", "#nextMonth", function () {
     currentDate.setMonth(currentDate.getMonth() + 1);
     renderCalendar();
 });
-

@@ -11,7 +11,52 @@
 <div class="container mt-4">
     @if (role == "Admin")
     {
-        <p>Bem vindo, @role!</p>
+            <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-9 col-lg-7">
+                    <div class="card shadow-lg border-0 rounded-4 px-3 py-4"
+                         style="background: linear-gradient(120deg, #e0f7fa 60%, #ede7f6 120%); min-height: 340px;">
+                        <div class="card-body text-center">
+
+                            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Admin Illustration"
+                                 style="width:72px;height:72px;" class="mb-2 opacity-75" onerror="this.style.display='none'">
+
+                            <h2 class="fw-bold mb-2" style="color:#2556a9; letter-spacing:.03em;">Área do Administrador</h2>
+                            <p class="text-muted mb-4" style="font-size:1.1rem;">
+                                Bem-vindo! Aqui tens acesso à gestão de menus, utilizadores e toda a operação diária do refeitório da escola.
+                            </p>
+
+                            <div class="row mt-4 g-4 text-start justify-content-center">
+                                <div class="col-md-6 col-12">
+                                    <div class="border-start border-5 border-primary bg-white shadow-sm rounded-4 p-3 h-100">
+                                        <div class="fw-semibold text-primary mb-1">💡 Funções principais:</div>
+                                        <ul class="mb-2 small ps-3">
+                                            <li>Gerir e editar menus de cada dia útil.</li>
+                                            <li>Visualizar histórico das marcações.</li>
+                                            <li>Aprovar registos de novos utilizadores rapidamente.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="border-start border-5 border-success bg-white shadow-sm rounded-4 p-3 h-100">
+                                        <div class="fw-semibold text-success mb-1">Dicas:</div>
+                                        <ul class="mb-2 small ps-3">
+                                            <li>Menus podem ser alterados em qualquer dia futuro.</li>
+                                            <li>Clique em "Gerir menus" acima para visualizar e editar.</li>
+                                            <li>Verifica todos os pedidos de registo na aba própria.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p class="text-muted mt-4 small">
+                                👋 Obrigado por manteres a cantina a funcionar!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     }
     else if (role == "Staff")
     {
@@ -19,7 +64,6 @@
     }
     else
     {
-        <!-- Header -->
         <header class="bg-amber-500 shadow-md mb-4">
             <div class="max-w-6xl mx-auto d-flex justify-content-between align-items-center p-4" style="display:flex;align-items:center;justify-content:space-between;">
                 <h1 class="text-2xl font-bold text-white" style="margin:0;">Bar do Inete</h1>
@@ -31,7 +75,6 @@
             </div>
         </header>
 
-        <!-- Hero -->
         <section class="bg-yellow-100 py-5 text-center mb-4" style="padding-top:48px;padding-bottom:48px;">
             <h2 class="text-4xl font-extrabold text-amber-700 mb-3">Bem-vindo ao Bar da Escola!</h2>
             <p class="text-lg text-gray-700 mb-4">Comida barata e boa, feita apenas para ti!</p>
@@ -39,14 +82,12 @@
             <button type="button" class="btn btn-warning btn-sm" id="VerBarBtn">Bar escolar</button>
         </section>
 
-        <!-- Horário -->
         <section id="horario" class="bg-amber-100 py-3 mb-4 text-center">
             <h3 class="text-3xl font-bold text-amber-700 mb-2">Horário de Funcionamento</h3>
             <p class="text-lg">Segunda a Sexta: <strong>8h às 18h</strong></p>
             <p class="text-lg">Sábado e Domingo: <strong>Fechado</strong></p>
         </section>
 
-        <!-- Contactos -->
         <section id="contactos" class="mb-4">
             <h3 class="text-3xl font-bold text-amber-600 mb-2 text-center">Contactos</h3>
             <div class="text-center text-gray-700">
@@ -56,14 +97,9 @@
             </div>
         </section>
 
-        <!-- Footer -->
         <footer class="bg-amber-500 text-white text-center py-3 mt-4">
             <p class="mb-0">© 2025 Bar da Escola — Feito pelo TGPSI2301</p>
         </footer>
     }
 </div>
 
-
-<form asp-controller="Auth" asp-action="Logout" method="post" style="display:inline">
-    <button type="submit" class="btn btn-danger" style="position:fixed;left:20px;bottom:20px;">Logout</button>
-</form>

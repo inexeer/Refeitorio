@@ -9,7 +9,7 @@
 
     $(document).on("click", ".edit-product-btn", function (e) {
         e.preventDefault();
-        var productId = $(this).data("id");  // gets the ID from data-id
+        var productId = $(this).data("id");
 
         $.get("/Home/FuncEditProduct?id=" + productId, function (data) {
             $("#page-content").html(data);

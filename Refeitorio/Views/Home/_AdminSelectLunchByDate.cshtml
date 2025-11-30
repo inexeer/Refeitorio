@@ -7,7 +7,7 @@
         <label class="form-label fw-bold text-success">Opção Vegetariana</label>
         <select asp-for="SelectedVegetarianId"
                 asp-items="@Model.VegOptions"
-                class="form-select lunch-select"
+                class="form-select"
                 data-type="veg">
             <option value="">-- Escolher Vegetariano --</option>
         </select>
@@ -17,28 +17,17 @@
         <label class="form-label fw-bold text-primary">Opção Normal</label>
         <select asp-for="SelectedNormalId"
                 asp-items="@Model.NormalOptions"
-                class="form-select lunch-select"
+                class="form-select"
                 data-type="normal">
             <option value="">-- Escolher Normal --</option>
         </select>
     </div>
 
+    <div class="mb-3">
+        <small class="text-muted">
+            Podes seleccionar ambas as opções (Normal e Vegetariano) para o mesmo dia.
+        </small>
+    </div>
+
     <button type="submit" class="btn btn-success">Salvar Escolha</button>
 </form>
-
-<script>
-    $(document).on("change", ".lunch-select", function () {
-        const val = $(this).val();
-        if (val) {
-            $(".lunch-select").not(this).prop("disabled", true);
-        } else {
-            $(".lunch-select").not(this).prop("disabled", false);
-        }
-    });
-
-    // Initial disable if already selected
-    $(function () {
-        if ($("#SelectedVegetarianId").val()) $("#SelectedNormalId").prop("disabled", true);
-        if ($("#SelectedNormalId").val()) $("#SelectedVegetarianId").prop("disabled", true);
-    });
-</script>

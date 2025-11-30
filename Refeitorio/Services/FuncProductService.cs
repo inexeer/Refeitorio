@@ -62,9 +62,7 @@ namespace Refeitorio.Services
 
         public void SerializeProducts()
         {
-            //var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Data", "Products.json");
 
-            //Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
 
             var options = new JsonSerializerOptions { WriteIndented = true };
             string json = JsonSerializer.Serialize(m_products, options);

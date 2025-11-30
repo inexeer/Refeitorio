@@ -21,10 +21,10 @@ namespace Refeitorio.Services
 
         public void BookLunch(string userEmail, string date, string option)
         {
-            // Remove old booking for same date (only one per day)
+
             Bookings.RemoveAll(b => b.UserEmail == userEmail && b.Date == date);
 
-            // Add new
+
             Bookings.Add(new LunchBooking
             {
                 Id = Bookings.Any() ? Bookings.Max(b => b.Id) + 1 : 1,

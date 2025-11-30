@@ -168,5 +168,35 @@
     "Total": 1.20,
     "UserEmail": "aluno@inete.net",
     "PurchasedAt": "2025-11-28T14:44:37.3407972+00:00"
+  },
+  {
+    "Id": 18,
+    "ProductId": 2,
+    "ProductName": "Tosta Mista",
+    "Price": 2.10,
+    "Quantity": 1,
+    "Total": 2.10,
+    "UserEmail": "aluno@inete.net",
+    "PurchasedAt": "2025-11-30T12:21:10.8594472+00:00"
+  },
+  {
+    "Id": 19,
+    "ProductId": 2,
+    "ProductName": "Tosta Mista",
+    "Price": 2.10,
+    "Quantity": 1,
+    "Total": 2.10,
+    "UserEmail": "aluno@inete.net",
+    "PurchasedAt": "2025-11-30T12:55:18.6175351+00:00"
+  },
+  {
+    "Id": 20,
+    "ProductId": 2,
+    "ProductName": "Tosta Mista",
+    "Price": 2.10,
+    "Quantity": 2,
+    "Total": 4.20,
+    "UserEmail": "aluno@inete.net",
+    "PurchasedAt": "2025-11-30T12:55:20.7391584+00:00"
   }
 ]

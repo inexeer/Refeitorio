@@ -12,5 +12,12 @@
     "MainDish": "b",
     "Soup": "b",
     "Dessert": "b"
+  },
+  {
+    "Id": 3,
+    "Option": 0,
+    "MainDish": "c",
+    "Soup": "c",
+    "Dessert": "c"
   }
 ]

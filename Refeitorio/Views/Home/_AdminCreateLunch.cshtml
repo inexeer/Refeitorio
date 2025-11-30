@@ -38,7 +38,6 @@
 		fetch("/Home/AdminLunchForm")
 			.then(response => response.text())
 			.then(html => {
-				// This replaces the ENTIRE main content with the form
 				document.getElementById("page-content").innerHTML = html;
 			});
 	});
