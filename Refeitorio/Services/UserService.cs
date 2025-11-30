@@ -98,5 +98,15 @@ namespace Refeitorio.Services
                 Save();
             }
         }
+
+        public void RejectUser(Guid id)
+        {
+            var user = m_users.FirstOrDefault(u => u.Id == id);
+            if (user != null)
+            {
+                m_users.Remove(user);
+                Save();
+            }
+        }
     }
 }

@@ -580,6 +580,13 @@ namespace Refeitorio.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public IActionResult RejectUser(Guid id)
+        {
+            m_userService.RejectUser(id);
+            return RedirectToAction("Index");
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
