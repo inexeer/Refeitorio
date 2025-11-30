@@ -9,7 +9,7 @@
     "Kcal": 100,
     "Protein": 12,
     "Fat": 12,
-    "Carbs": 20,
+    "Carbs": 21,
     "Allergens": "Ovo",
     "Stock": 5,
     "ImageFileName": "1.jpg"
@@ -27,6 +27,21 @@
     "Carbs": 50,
     "Allergens": "Lactose",
     "Stock": 15,
+    "ImageFileName": "default.jpg"
+  },
+  {
+    "Id": 3,
+    "CategoryId": 0,
+    "Category": "abc",
+    "Name": "abc",
+    "Description": "abc",
+    "Price": 1,
+    "Kcal": 1,
+    "Protein": 1,
+    "Fat": 1,
+    "Carbs": 1,
+    "Allergens": "1",
+    "Stock": 1,
     "ImageFileName": "default.jpg"
   }
 ]

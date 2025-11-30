@@ -213,7 +213,7 @@ namespace Refeitorio.Controllers
                     if (!allowed.Contains(ext))
                     {
                         ModelState.AddModelError("ImageFile", "Formato inválido.");
-                        return View(model);
+                        return RedirectToAction("Index");
                     }
 
                     product.ImageFileName = $"{product.Id}{ext}";
@@ -229,7 +229,7 @@ namespace Refeitorio.Controllers
                 m_productService.AddProduct(product);
                 return RedirectToAction("Index");
             }
-            return View(model);
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
